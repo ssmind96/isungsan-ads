@@ -1,0 +1,102 @@
+name: Purge jsDelivr cache
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - "banners/**"
+      - "assets.json"
+  workflow_dispatch: {}
+
+jobs:
+  purge:
+    runs-on: ubuntu-latest
+    env:
+      REPO: ${{ github.repository }}  # e.g. ssmind96/isungsan-ads
+      BRANCH: main
+      WATCH_PATHS: "banners/** assets.json"
+
+    steps:
+      - name: Check out
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Resolve before/after SHAs
+        id: sha
+        run: |
+          BEFORE="${{ github.event.before }}"
+          AFTER="${{ github.sha }}"
+          if [ -z "$BEFORE" ] || [ "$BEFORE" = "0000000000000000000000000000000000000000" ]; then
+            BEFORE=$(git rev-parse "${AFTER}^" 2>/dev/null || echo "$AFTER")
+          fi
+          echo "before=$BEFORE" >> "$GITHUB_OUTPUT"
+          echo "after=$AFTER"   >> "$GITHUB_OUTPUT"
+
+      - name: Collect changed files (banners/** & assets.json)
+        id: files
+        run: |
+          set -e
+          # 변경된 파일만 수집
+          git diff --name-only ${{ steps.sha.outputs.before }} ${{ steps.sha.outputs.after }} -- $WATCH_PATHS \
+            | awk 'NF' > changed.txt || true
+
+          # 매니페스트는 항상 함께 purge
+          grep -qx "assets.json" changed.txt 2>/dev/null || echo "assets.json" >> changed.txt
+
+          # 존재하는 파일만 남기기(삭제된 항목 제외)
+          awk 'system("[ -f \""$0"\" ]") == 0' changed.txt > changed_existing.txt || true
+
+          echo "Changed files:"
+          cat changed_existing.txt || true
+
+          FILES=$(tr '\n' ' ' < changed_existing.txt)
+          echo "list=$FILES" >> "$GITHUB_OUTPUT"
+
+      - name: Build CDN & PURGE URLs
+        id: urls
+        run: |
+          set -e
+          REPO="${{ env.REPO }}"
+          BRANCH="${{ env.BRANCH }}"
+          COMMIT="${{ steps.sha.outputs.after }}"
+
+          CDN_BASE_BRANCH="https://cdn.jsdelivr.net/gh/$REPO@$BRANCH"
+          CDN_BASE_COMMIT="https://cdn.jsdelivr.net/gh/$REPO@$COMMIT"
+
+          to_purge() { echo "$1" | sed 's#^https://cdn\.jsdelivr\.net#https://purge.jsdelivr.net#'; }
+
+          CDN_URLS=""
+          PURGE_URLS=""
+          for f in ${{ steps.files.outputs.list }}; do
+            U1="$CDN_BASE_BRANCH/$f"   # @main
+            U2="$CDN_BASE_COMMIT/$f"  # @<commit>
+            P1=$(to_purge "$U1")
+            P2=$(to_purge "$U2")
+            CDN_URLS="$CDN_URLS $U1 $U2"
+            PURGE_URLS="$PURGE_URLS $P1 $P2"
+          done
+
+          echo "cdn_urls=$CDN_URLS"     >> "$GITHUB_OUTPUT"
+          echo "purge_urls=$PURGE_URLS" >> "$GITHUB_OUTPUT"
+
+      - name: Purge jsDelivr caches
+        if: ${{ steps.files.outputs.list != '' }}
+        run: |
+          set -e
+          for url in ${{ steps.urls.outputs.purge_urls }}; do
+            echo "Purging: $url"
+            curl -fsS "$url" >/dev/null || echo "::warning::Purge failed for $url (continuing)"
+            sleep 0.7
+          done
+
+      - name: Warm CDN edges (optional)
+        if: ${{ steps.files.outputs.list != '' }}
+        run: |
+          set -e
+          for url in ${{ steps.urls.outputs.cdn_urls }}; do
+            echo "Warming: $url"
+            curl -I -fsS "$url" >/dev/null || true
+            sleep 0.3
+          done
+
