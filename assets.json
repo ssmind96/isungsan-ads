@@ -2,51 +2,39 @@
   "banners": [
     {
       "order": 1,
-      "title": "test",
-      "image": "https://cdn.jsdelivr.net/gh/ssmind96/isungsan-ads@main/banners/test-before.png",
-      "link": "",
-      "startDate": "20240101",
-      "endDate": "20250101"
-    },
-    {
-      "order": 2,
       "title": "영혼사랑축제",
       "image": "https://cdn.jsdelivr.net/gh/ssmind96/isungsan-ads@main/banners/2025SoulLove.png",
+      "bgColor": "#EEEEEE",
       "link": "",
       "startDate": "20251001",
       "endDate": "20251102"
     },
     {
-      "order": 3,
+      "order": 2,
       "title": "라마나욧",
       "image": "https://cdn.jsdelivr.net/gh/ssmind96/isungsan-ads@main/banners/2025Ramanayot.png",
+      "bgColor": "#EEEEEE",
       "link": "",
       "startDate": "20251001",
       "endDate": "20251019"
     },
     {
-      "order": 4,
+      "order": 3,
       "title": "바자회",
       "image": "https://cdn.jsdelivr.net/gh/ssmind96/isungsan-ads@main/banners/2025Bazaar.png",
+      "bgColor": "#EEEEEE",
       "link": "",
       "startDate": "20251001",
       "endDate": "20251025"
     },
     {
-      "order": 5,
+      "order": 4,
       "title": "플리마켓",
       "image": "https://cdn.jsdelivr.net/gh/ssmind96/isungsan-ads@main/banners/2025FleaMarket.png",
+      "bgColor": "#EEEEEE",
       "link": "",
       "startDate": "20251001",
       "endDate": "20251101"
-    },
-    {
-      "order": 6,
-      "title": "test",
-      "image": "https://cdn.jsdelivr.net/gh/ssmind96/isungsan-ads@main/banners/test-after.png",
-      "link": "",
-      "startDate": "20350101",
-      "endDate": "20450101"
     }
   ]
 }

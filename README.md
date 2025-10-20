@@ -23,6 +23,7 @@ isungsan-ads/
       "order": 1,
       "title": "배너 제목",
       "image": "https://cdn.jsdelivr.net/gh/ssmind96/isungsan-ads@main/banners/이미지파일명.png",
+      "bgColor": "#EEEEEE",
       "link": "https://연결할주소.com",
       "startDate": "20250101",
       "endDate": "20251231"
@@ -38,6 +39,7 @@ isungsan-ads/
 | `order` | Number | 배너 표시 순서 (작은 숫자가 먼저 표시됨) | `1`, `2`, `3` |
 | `title` | String | 배너의 제목 또는 설명 (베너에 링크가 있을 시 링크의 제목으로 표시 됨) | `"영혼사랑축제"` |
 | `image` | String | 배너 이미지의 CDN URL (banners 폴더에 파일을 올리고 해당 이름으로 설정) | `"https://cdn.jsdelivr.net/gh/ssmind96/isungsan-ads@main/banners/2025SoulLove.png"` |
+| `bgColor` | String | 배너 배경색 (rgb 형식) | `"#EEEEEE"` |
 | `link` | String | 배너 클릭 시 이동할 URL (비어있으면 클릭 불가) | `"https://example.com"` 또는 `""` |
 | `startDate` | String | 배너 노출 시작일 (YYYYMMDD 형식) | `"20250101"` |
 | `endDate` | String | 배너 노출 종료일 (YYYYMMDD 형식) | `"20251231"` |
@@ -81,6 +83,7 @@ isungsan-ads/
   "order": 7,
   "title": "2025 크리스마스 행사",
   "image": "https://cdn.jsdelivr.net/gh/ssmind96/isungsan-ads@main/banners/2025Christmas.png",
+  "bgColor": "#EEEEEE",
   "link": "https://isungsan.org/christmas",
   "startDate": "20251201",
   "endDate": "20251226"
