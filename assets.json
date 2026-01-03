@@ -2,13 +2,13 @@
   "banners": [
     {
       "order": 1,
-      "title": "2025표어",
+      "title": "2026표어",
       "image":
-        "https://cdn.jsdelivr.net/gh/ssmind96/isungsan-ads@main/banners/2025WatchWord.png",
+        "https://cdn.jsdelivr.net/gh/ssmind96/isungsan-ads@main/banners/2026WatchWord.png",
       "bgColor": "#EEEEEE",
       "link": "",
-      "startDate": "20250101",
-      "endDate": "20251231"
+      "startDate": "20260101",
+      "endDate": "20261231"
     },
     {
       "order": 2,
@@ -18,33 +18,6 @@
       "link": "",
       "startDate": "20251001",
       "endDate": "20251102"
-    },
-    {
-      "order": 3,
-      "title": "라마나욧",
-      "image": "https://cdn.jsdelivr.net/gh/ssmind96/isungsan-ads@main/banners/2025Ramanayot.png",
-      "bgColor": "#EEEEEE",
-      "link": "",
-      "startDate": "20251001",
-      "endDate": "20251019"
-    },
-    {
-      "order": 4,
-      "title": "바자회",
-      "image": "https://cdn.jsdelivr.net/gh/ssmind96/isungsan-ads@main/banners/2025Bazaar.png",
-      "bgColor": "#EEEEEE",
-      "link": "",
-      "startDate": "20251001",
-      "endDate": "20251025"
-    },
-    {
-      "order": 5,
-      "title": "플리마켓",
-      "image": "https://cdn.jsdelivr.net/gh/ssmind96/isungsan-ads@main/banners/2025FleaMarket.png",
-      "bgColor": "#EEEEEE",
-      "link": "",
-      "startDate": "20251001",
-      "endDate": "20251101"
     }
   ]
 }
