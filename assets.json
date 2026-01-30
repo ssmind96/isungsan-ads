@@ -18,6 +18,15 @@
       "link": "https://www.isungsan.net/board/view.do?iboardgroupseq=0&iboardmanagerseq=127&iboardseq=740&irefamily=740&ireseq=0",
       "startDate": "20260101",
       "endDate": "20260202"
+    },
+    {
+      "order": 3,
+      "title": "2026 청년부 일본 비젼트립",
+      "image": "https://cdn.jsdelivr.net/gh/ssmind96/isungsan-ads@main/banners/banner202601-1.png",
+      "bgColor": "#EEEEEE",
+      "link": "https://www.isungsan.net/board/view.do?iboardgroupseq=null&iboardmanagerseq=127&currentpagenum=&searchitem=&searchvalue=&iboardseq=779&irefamily=779&ireseq=0",
+      "startDate": "20260101",
+      "endDate": "20260208"
     }
   ]
 }
