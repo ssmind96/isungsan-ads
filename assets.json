@@ -1,7 +1,7 @@
 {
   "banners": [
     {
-      "order": 2,
+      "order": 4,
       "title": "2026표어",
       "image":
         "https://cdn.jsdelivr.net/gh/ssmind96/isungsan-ads@main/banners/2026WatchWord.png",
@@ -25,6 +25,15 @@
       "image": "https://cdn.jsdelivr.net/gh/ssmind96/isungsan-ads@main/banners/banner202601-1.png",
       "bgColor": "#f6ebde",
       "link": "https://www.isungsan.net/board/view.do?iboardgroupseq=null&iboardmanagerseq=127&currentpagenum=&searchitem=&searchvalue=&iboardseq=779&irefamily=779&ireseq=0",
+      "startDate": "20260101",
+      "endDate": "20260208"
+    },
+    {
+      "order": 2,
+      "title": "2026 제자대 수료식",
+      "image": "https://cdn.jsdelivr.net/gh/ssmind96/isungsan-ads@main/banners/banner202601-2.png",
+      "bgColor": "#EEEEEE",
+      "link": "https://www.isungsan.net/board/view.do?iboardgroupseq=0&iboardmanagerseq=127&iboardseq=783&irefamily=783&ireseq=0",
       "startDate": "20260101",
       "endDate": "20260208"
     }
