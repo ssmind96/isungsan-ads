@@ -30,12 +30,12 @@
     },
     {
       "order": 1,
-      "title": "2026 제자대 수료식",
-      "image": "https://cdn.jsdelivr.net/gh/ssmind96/isungsan-ads@main/banners/banner202601-2.png",
-      "bgColor": "#ebd3d5",
-      "link": "https://www.isungsan.net/board/view.do?iboardgroupseq=0&iboardmanagerseq=127&iboardseq=783&irefamily=783&ireseq=0",
+      "title": "2026 교사세미나",
+      "image": "https://cdn.jsdelivr.net/gh/ssmind96/isungsan-ads@main/banners/banner202602-2.png",
+      "bgColor": "#EEEEEE",
+      "link": "https://www.isungsan.net/board/view.do?iboardgroupseq=null&iboardmanagerseq=127&currentpagenum=&searchitem=&searchvalue=&iboardseq=789&irefamily=789&ireseq=0",
       "startDate": "20260101",
-      "endDate": "20260208"
+      "endDate": "20260222"
     },
     {
       "order": 2,
