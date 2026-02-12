@@ -1,7 +1,7 @@
 {
   "banners": [
     {
-      "order": 5,
+      "order": 4,
       "title": "2026표어",
       "image":
         "https://cdn.jsdelivr.net/gh/ssmind96/isungsan-ads@main/banners/2026WatchWord.png",
@@ -11,7 +11,7 @@
       "endDate": "20261231"
     },
     {
-      "order": 4,
+      "order": 3,
       "title": "구원의증거",
       "image": "https://cdn.jsdelivr.net/gh/ssmind96/isungsan-ads@main/banners/BookTheEvidenceOfSalvation.png",
       "bgColor": "#EEEEEE",
@@ -20,7 +20,7 @@
       "endDate": "20260202"
     },
     {
-      "order": 3,
+      "order": 2,
       "title": "2026 안수집사세미나",
       "image": "https://cdn.jsdelivr.net/gh/ssmind96/isungsan-ads@main/banners/banner202602-3.png",
       "bgColor": "#EEEEEE",
@@ -37,14 +37,5 @@
       "startDate": "20260101",
       "endDate": "20260222"
     },
-    {
-      "order": 2,
-      "title": "6대 임직자 제주세미나",
-      "image": "https://cdn.jsdelivr.net/gh/ssmind96/isungsan-ads@main/banners/banner202602-1.png",
-      "bgColor": "#b1c6d2",
-      "link": "https://www.isungsan.net/board/view.do?iboardgroupseq=null&iboardmanagerseq=127&currentpagenum=&searchitem=&searchvalue=&iboardseq=788&irefamily=788&ireseq=0",
-      "startDate": "20260101",
-      "endDate": "20260211"
-    }
   ]
 }
