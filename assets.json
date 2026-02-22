@@ -20,7 +20,7 @@
       "endDate": "20260202"
     },
     {
-      "order": 2,
+      "order": 1,
       "title": "2026 안수집사세미나",
       "image": "https://cdn.jsdelivr.net/gh/ssmind96/isungsan-ads@main/banners/banner202602-3.png",
       "bgColor": "#EEEEEE",
@@ -29,13 +29,13 @@
       "endDate": "20260301"
     },
     {
-      "order": 1,
-      "title": "2026 교사세미나",
-      "image": "https://cdn.jsdelivr.net/gh/ssmind96/isungsan-ads@main/banners/banner202602-2.png",
+      "order": 2,
+      "title": "2026 권사세미나",
+      "image": "https://cdn.jsdelivr.net/gh/ssmind96/isungsan-ads@main/banners/banner202602-4.png",
       "bgColor": "#EEEEEE",
-      "link": "https://www.isungsan.net/board/view.do?iboardgroupseq=null&iboardmanagerseq=127&currentpagenum=&searchitem=&searchvalue=&iboardseq=789&irefamily=789&ireseq=0",
+      "link": "https://www.isungsan.net/board/view.do?iboardgroupseq=null&iboardmanagerseq=127&currentpagenum=&searchitem=&searchvalue=&iboardseq=817&irefamily=817&ireseq=0",
       "startDate": "20260101",
-      "endDate": "20260222"
+      "endDate": "20260308"
     },
   ]
 }
