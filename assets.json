@@ -1,25 +1,6 @@
 {
   "banners": [
     {
-      "order": 4,
-      "title": "2026표어",
-      "image":
-        "https://cdn.jsdelivr.net/gh/ssmind96/isungsan-ads@main/banners/2026WatchWord.png",
-      "bgColor": "#EEEEEE",
-      "link": "",
-      "startDate": "20260101",
-      "endDate": "20261231"
-    },
-    {
-      "order": 3,
-      "title": "2026 제자대 개강",
-      "image": "https://cdn.jsdelivr.net/gh/ssmind96/isungsan-ads@main/banners/banner202602-5.png",
-      "bgColor": "#EEEEEE",
-      "link": "https://www.isungsan.net/board/view.do?iboardgroupseq=null&iboardmanagerseq=127&currentpagenum=&searchitem=&searchvalue=&iboardseq=818&irefamily=818&ireseq=0",
-      "startDate": "20260101",
-      "endDate": "20260315"
-    },
-    {
       "order": 1,
       "title": "2026 안수집사세미나",
       "image": "https://cdn.jsdelivr.net/gh/ssmind96/isungsan-ads@main/banners/banner202602-3.png",
@@ -37,5 +18,23 @@
       "startDate": "20260101",
       "endDate": "20260308"
     },
+    {
+      "order": 3,
+      "title": "2026 제자대 개강",
+      "image": "https://cdn.jsdelivr.net/gh/ssmind96/isungsan-ads@main/banners/banner202602-5.png",
+      "bgColor": "#EEEEEE",
+      "link": "https://www.isungsan.net/board/view.do?iboardgroupseq=null&iboardmanagerseq=127&currentpagenum=&searchitem=&searchvalue=&iboardseq=818&irefamily=818&ireseq=0",
+      "startDate": "20260101",
+      "endDate": "20260315"
+    },
+    {
+      "order": 4,
+      "title": "2026표어",
+      "image": "https://cdn.jsdelivr.net/gh/ssmind96/isungsan-ads@main/banners/2026WatchWord.png",
+      "bgColor": "#EEEEEE",
+      "link": "",
+      "startDate": "20260101",
+      "endDate": "20261231"
+    }
   ]
 }
