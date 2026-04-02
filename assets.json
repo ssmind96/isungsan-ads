@@ -2,7 +2,7 @@
   "banners": [
     {
       "order": 2,
-      "title": "2026 부활주",
+      "title": "2026 부활주일",
       "image": "https://cdn.jsdelivr.net/gh/ssmind96/isungsan-ads@main/banners/banner202603-3.png",
       "bgColor": "#EEEEEE",
       "link": "https://www.isungsan.net/board/view.do?iboardgroupseq=null&iboardmanagerseq=127&currentpagenum=&searchitem=&searchvalue=&iboardseq=856&irefamily=856&ireseq=0",
@@ -11,7 +11,7 @@
     },
     {
       "order": 3,
-      "title": "2026 봉헌",
+      "title": "2026 봉헌식",
       "image": "https://cdn.jsdelivr.net/gh/ssmind96/isungsan-ads@main/banners/banner202603-4.png",
       "bgColor": "#EEEEEE",
       "link": "https://www.isungsan.net/board/view.do?iboardgroupseq=null&iboardmanagerseq=127&currentpagenum=&searchitem=&searchvalue=&iboardseq=848&irefamily=848&ireseq=0",
@@ -20,7 +20,7 @@
     },
     {
       "order": 1,
-      "title": "2026 고난주간특",
+      "title": "2026 고난주간특새",
       "image": "https://cdn.jsdelivr.net/gh/ssmind96/isungsan-ads@main/banners/banner202603-2.png",
       "bgColor": "#EEEEEE",
       "link": "https://www.isungsan.net/board/view.do?iboardgroupseq=null&iboardmanagerseq=127&currentpagenum=&searchitem=&searchvalue=&iboardseq=847&irefamily=847&ireseq=0",
