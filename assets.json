@@ -1,7 +1,7 @@
 {
   "banners": [
     {
-      "order": 2,
+      "order": 1,
       "title": "2026 어버이주일",
       "image": "https://cdn.jsdelivr.net/gh/ssmind96/isungsan-ads@main/banners/banner202604-1rr.png",
       "bgColor": "#EEEEEE",
@@ -10,16 +10,7 @@
       "endDate": "20260510"
     },
     {
-      "order": 1,
-      "title": "2026 봉헌식",
-      "image": "https://cdn.jsdelivr.net/gh/ssmind96/isungsan-ads@main/banners/banner202603-4r.png",
-      "bgColor": "#EEEEEE",
-      "link": "https://www.isungsan.net/board/view.do?iboardgroupseq=null&iboardmanagerseq=127&currentpagenum=&searchitem=&searchvalue=&iboardseq=848&irefamily=848&ireseq=0",
-      "startDate": "20260101",
-      "endDate": "20260505"
-    },
-    {
-      "order": 3,
+      "order": 2,
       "title": "2026 스승의주일",
       "image": "https://cdn.jsdelivr.net/gh/ssmind96/isungsan-ads@main/banners/banner202604-2r.png",
       "bgColor": "#EEEEEE",
@@ -28,7 +19,7 @@
       "endDate": "20260524"
     },
     {
-      "order": 4,
+      "order": 3,
       "title": "2026 제자대 진행중",
       "image": "https://cdn.jsdelivr.net/gh/ssmind96/isungsan-ads@main/banners/banner202603-11.png",
       "bgColor": "#EEEEEE",
@@ -37,7 +28,7 @@
       "endDate": "20260630"
     },
     {
-      "order": 5,
+      "order": 4,
       "title": "2026표어",
       "image": "https://cdn.jsdelivr.net/gh/ssmind96/isungsan-ads@main/banners/2026WatchWord.png",
       "bgColor": "#EEEEEE",
