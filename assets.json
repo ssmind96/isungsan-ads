@@ -1,7 +1,7 @@
 {
   "banners": [
     {
-      "order": 1,
+      "order": 2,
       "title": "성산가족수양",
       "image": "https://cdn.jsdelivr.net/gh/ssmind96/isungsan-ads@main/banners/banner202606-2.png",
       "bgColor": "#EEEEEE",
@@ -10,7 +10,7 @@
       "endDate": "20260722"
     },
     {
-      "order": 2,
+      "order": 1,
       "title": "2026 여름성경학교",
       "image": "https://cdn.jsdelivr.net/gh/ssmind96/isungsan-ads@main/banners/banner202606-1.png",
       "bgColor": "#EEEEEE",
@@ -20,12 +20,12 @@
     },
     {
       "order": 3,
-      "title": "2026 제자대 진행중",
-      "image": "https://cdn.jsdelivr.net/gh/ssmind96/isungsan-ads@main/banners/banner202603-11.png",
+      "title": "청년부여름수양회",
+      "image": "https://cdn.jsdelivr.net/gh/ssmind96/isungsan-ads@main/banners/banner202606-3.png",
       "bgColor": "#EEEEEE",
-      "link": "https://www.isungsan.net/board/view.do?iboardgroupseq=null&iboardmanagerseq=127&currentpagenum=&searchitem=&searchvalue=&iboardseq=845&irefamily=845&ireseq=0",
+      "link": "https://www.isungsan.net/board/view.do?iboardgroupseq=null&iboardmanagerseq=127&currentpagenum=&searchitem=&searchvalue=&iboardseq=962&irefamily=962&ireseq=0",
       "startDate": "20260101",
-      "endDate": "20260610"
+      "endDate": "20260801"
     },
     {
       "order": 4,
