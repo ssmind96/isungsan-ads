@@ -1,15 +1,6 @@
 {
   "banners": [
     {
-      "order": 2,
-      "title": "성산가족수양",
-      "image": "https://cdn.jsdelivr.net/gh/ssmind96/isungsan-ads@main/banners/banner202606-2.png",
-      "bgColor": "#EEEEEE",
-      "link": "https://www.isungsan.net/board/view.do?iboardgroupseq=null&iboardmanagerseq=127&currentpagenum=&searchitem=&searchvalue=&iboardseq=962&irefamily=962&ireseq=0",
-      "startDate": "20260101",
-      "endDate": "20260722"
-    },
-    {
       "order": 1,
       "title": "2026 여름성경학교",
       "image": "https://cdn.jsdelivr.net/gh/ssmind96/isungsan-ads@main/banners/banner202606-1.png",
@@ -19,13 +10,13 @@
       "endDate": "20260719"
     },
     {
-      "order": 4,
-      "title": "청년부하계수양회",
-      "image": "https://cdn.jsdelivr.net/gh/ssmind96/isungsan-ads@main/banners/banner202606-3r.png",
+      "order": 2,
+      "title": "성산가족수양",
+      "image": "https://cdn.jsdelivr.net/gh/ssmind96/isungsan-ads@main/banners/banner202606-2.png",
       "bgColor": "#EEEEEE",
       "link": "https://www.isungsan.net/board/view.do?iboardgroupseq=null&iboardmanagerseq=127&currentpagenum=&searchitem=&searchvalue=&iboardseq=962&irefamily=962&ireseq=0",
       "startDate": "20260101",
-      "endDate": "20260801"
+      "endDate": "20260722"
     },
     {
       "order": 3,
@@ -36,6 +27,25 @@
       "startDate": "20260101",
       "endDate": "20260725"
     },
+    {
+      "order": 4,
+      "title": "신중년하계수양회",
+      "image": "https://cdn.jsdelivr.net/gh/ssmind96/isungsan-ads@main/banners/banner202606-5.png",
+      "bgColor": "#EEEEEE",
+      "link": "https://www.isungsan.net/board/view.do?iboardgroupseq=null&iboardmanagerseq=127&currentpagenum=&searchitem=&searchvalue=&iboardseq=962&irefamily=962&ireseq=0",
+      "startDate": "20260101",
+      "endDate": "20260725"
+    },
+    {
+      "order": 4,
+      "title": "청년부하계수양회",
+      "image": "https://cdn.jsdelivr.net/gh/ssmind96/isungsan-ads@main/banners/banner202606-3r.png",
+      "bgColor": "#EEEEEE",
+      "link": "https://www.isungsan.net/board/view.do?iboardgroupseq=null&iboardmanagerseq=127&currentpagenum=&searchitem=&searchvalue=&iboardseq=962&irefamily=962&ireseq=0",
+      "startDate": "20260101",
+      "endDate": "20260801"
+    },
+    
     {
       "order": 5,
       "title": "2026표어",
