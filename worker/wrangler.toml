@@ -1,0 +1,8 @@
+name = "isungsan-ads-auth"
+main = "index.js"
+compatibility_date = "2026-01-01"
+workers_dev = true
+
+[vars]
+ADMIN_URL = "https://ssmind96.github.io/isungsan-ads/admin/"
+GITHUB_CLIENT_ID = "REPLACE_WITH_OAUTH_CLIENT_ID"

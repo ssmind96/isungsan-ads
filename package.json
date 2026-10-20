@@ -1,0 +1,12 @@
+{
+  "name": "isungsan-ads-admin",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "deploy": "npm run check && npm test && npm run deploy:worker && npm run deploy:pages",
+    "deploy:pages": "node scripts/deploy-pages.mjs",
+    "deploy:worker": "node scripts/deploy-worker.mjs",
+    "test": "node --test tests/*.test.mjs",
+    "check": "node --check admin/app.js && node --check worker/index.js && node --check shared/model.js && node --check scripts/env.mjs && node --check scripts/deploy-worker.mjs && node --check scripts/deploy-pages.mjs"
+  }
+}

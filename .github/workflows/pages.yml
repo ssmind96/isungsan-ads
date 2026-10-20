@@ -1,0 +1,42 @@
+name: Deploy banner admin to Pages
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'admin/**'
+      - 'shared/**'
+      - '.github/workflows/pages.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: pages
+  cancel-in-progress: true
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/configure-pages@v5
+      - name: Prepare public site
+        env:
+          AUTH_SERVER: ${{ vars.ADS_AUTH_SERVER }}
+        run: |
+          mkdir -p _site
+          cp -r admin shared _site/
+          cp assets.json _site/
+          cp -r banners _site/
+          touch _site/.nojekyll
+          node --input-type=module -e 'import fs from "node:fs"; if (process.env.AUTH_SERVER) { const url = new URL(process.env.AUTH_SERVER); if (url.protocol !== "https:") throw Error("ADS_AUTH_SERVER must use HTTPS"); fs.writeFileSync("_site/admin/config.js", `export const authServer = ${JSON.stringify(url.origin)};\n`); }'
+          cp admin/redirect.html _site/index.html
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4
