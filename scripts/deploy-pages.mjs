@@ -63,6 +63,14 @@ async function main() {
     const sha = createHash('sha1').update(`blob ${bytes.length}\0`).update(bytes).digest('hex');
     if (existing.get(filename) !== sha) changes.push({ path: filename, mode: '100644', type: 'blob', content });
   }
+  // Seed the new directory once; subsequent admin edits in GitHub remain authoritative.
+  const seedPaths = ['businesses.json', ...(await fs.readdir(path.join(root, 'businesses'))).filter(name => /\.(png|jpe?g|webp|gif)$/i.test(name)).map(name => `businesses/${name}`)];
+  for (const filename of seedPaths) {
+    if (existing.has(filename)) continue;
+    const bytes = await fs.readFile(path.join(root, filename));
+    const blob = await github('git/blobs', { method: 'POST', body: { content: bytes.toString('base64'), encoding: 'base64' } });
+    changes.push({ path: filename, mode: '100644', type: 'blob', sha: blob.sha });
+  }
   const pages = await github('pages', { allowMissing: true });
   if (!pages) await github('pages', { method: 'POST', body: { build_type: 'workflow' } });
   else if (pages.build_type !== 'workflow') await github('pages', { method: 'PUT', body: { build_type: 'workflow' } });

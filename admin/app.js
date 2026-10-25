@@ -1,5 +1,5 @@
 import { authServer } from './config.js';
-import { cdnBase, imagePath, imageExtension, maxImageBytes, validateAssets } from '../shared/model.js';
+import { cdnBase, imagePath, imageExtension, maxImageBytes, validateAssets, managedImages, normalizeBusinessCategory } from '../shared/model.js';
 
 const element = id => document.getElementById(id);
 const state = { assets: null, head: '', files: [], uploads: new Map(), deletions: new Set(), dirty: false, busy: false, editing: null, preview: null };
@@ -64,18 +64,20 @@ function render() {
     content.append(actions); card.append(content); element('banners').append(card);
   });
   if (!element('banners').childElementCount) element('banners').append(node('div', 'empty', '표시할 배너가 없습니다. 새 소식을 추가해 보세요.'));
+  renderBusinesses();
   renderImages();
-  element('json').textContent = JSON.stringify(state.assets, null, 2);
+  const { businesses, ...bannerAssets } = state.assets;
+  element('json').textContent = JSON.stringify({ 'assets.json': bannerAssets, 'businesses.json': { businesses } }, null, 2);
 }
 
 function renderImages() {
   element('images').replaceChildren();
   const files = [...state.files, ...Array.from(state.uploads, ([path]) => ({ path }))];
-  const used = new Set(state.assets.banners.map(banner => imagePath(banner.image)));
+  const used = new Set(managedImages(state.assets).map(imagePath));
   for (const file of files) {
     if (!imagePath(cdnBase + file.path) || state.deletions.has(file.path)) continue;
     const card = node('article', 'card'); card.append(image(cdnBase + file.path, file.path));
-    const content = node('div', 'card-content'); content.append(node('h3', '', file.path.slice(8)), node('p', '', used.has(file.path) ? '배너에서 사용 중' : '사용하지 않는 이미지'));
+    const content = node('div', 'card-content'); content.append(node('h3', '', file.path.split('/').pop()), node('p', '', used.has(file.path) ? '광고에서 사용 중' : '사용하지 않는 이미지'));
     content.append(button('이미지 삭제', () => {
       if (!confirm(`${file.path} 이미지를 삭제할까요? 저장 후에는 Git 이력에서 복구할 수 있습니다.`)) return;
       const upload = state.uploads.get(file.path);
@@ -142,7 +144,7 @@ element('banner-form').addEventListener('submit', async event => {
 async function load() {
   const result = await api('/api/assets');
   for (const upload of state.uploads.values()) URL.revokeObjectURL(upload.preview);
-  state.assets = result.assets; state.assets.banners.sort((first, second) => first.order - second.order);
+  state.assets = result.assets; state.assets.businesses ||= []; state.assets.businesses.forEach(row => { row.category = normalizeBusinessCategory(row.category, row.id); }); state.assets.businesses.sort((a, b) => a.order - b.order); state.assets.banners.sort((first, second) => first.order - second.order);
   state.head = result.head; state.files = result.files; state.uploads.clear(); state.deletions.clear(); state.dirty = false;
   element('save').disabled = true; element('save').textContent = '변경 사항 저장'; render();
 }
@@ -166,7 +168,7 @@ element('save').addEventListener('click', async () => {
   if (!state.dirty || state.busy) return;
   try {
     validateAssets(state.assets);
-    const used = new Set(state.assets.banners.map(banner => imagePath(banner.image)));
+    const used = new Set(managedImages(state.assets).map(imagePath));
     const uploads = Array.from(state.uploads.values()).filter(upload => used.has(upload.path));
     if (uploads.reduce((sum, upload) => sum + upload.size, 0) > 20 * 1024 * 1024) throw new Error('한 번에 저장할 이미지는 총 20MB 이하여야 합니다.');
     state.busy = true;
@@ -187,8 +189,78 @@ for (const id of ['close', 'cancel']) element(id).addEventListener('click', () =
 element('editor').addEventListener('close', () => { if (state.preview) { URL.revokeObjectURL(state.preview); state.preview = null; } });
 for (const field of ['file', 'image']) element('banner-form').elements.namedItem(field).addEventListener('change', updatePreview);
 for (const id of ['search', 'filter']) element(id).addEventListener('input', render);
-for (const tab of ['banner', 'image']) element(`${tab}-tab`).addEventListener('click', () => {
-  for (const name of ['banner', 'image']) { const active = name === tab; element(`${name}-panel`).hidden = !active; element(`${name}-tab`).classList.toggle('selected', active); element(`${name}-tab`).setAttribute('aria-pressed', String(active)); }
+for (const tab of ['banner', 'business', 'image']) element(`${tab}-tab`).addEventListener('click', () => {
+  document.querySelector('.stats').hidden = tab !== 'banner';
+  for (const name of ['banner', 'business', 'image']) { const active = name === tab; element(`${name}-panel`).hidden = !active; element(`${name}-tab`).classList.toggle('selected', active); element(`${name}-tab`).setAttribute('aria-pressed', String(active)); }
 });
 window.addEventListener('beforeunload', event => { if (state.dirty || state.busy) { event.preventDefault(); event.returnValue = ''; } });
+
+
+let editingBusiness = null;
+function lines(value) { return value.split('\n').map(line => line.trim()).filter(Boolean); }
+function renderBusinesses() {
+  const container = element('businesses'); container.replaceChildren();
+  const query = element('business-search').value.toLowerCase();
+  state.assets.businesses.forEach((row, index, rows) => {
+    if (element('business-category-filter').value !== 'all' && row.category !== element('business-category-filter').value) return;
+    if (![row.title, row.description, row.address].join(' ').toLowerCase().includes(query)) return;
+    const card = node('article', 'card');
+    if (row.images[0]) card.append(image(row.images[0], row.title));
+    const content = node('div', 'card-content');
+    content.append(node('span', 'order', `기업 ${row.order} · ${row.category} · 이미지 ${row.images.length}장`), node('h3', '', row.title), node('p', '', row.description), node('p', '', [...row.phones, row.address, ...row.websites].filter(Boolean).join(' · ')));
+    const actions = node('div', 'card-actions');
+    const reorder = direction => { [rows[index], rows[index + direction]] = [rows[index + direction], rows[index]]; rows.forEach((item, i) => item.order = i + 1); dirty(); render(); };
+    actions.append(button('↑', () => reorder(-1), { disabled: index === 0, label: `${row.title} 순서 올리기` }), button('↓', () => reorder(1), { disabled: index === rows.length - 1, label: `${row.title} 순서 내리기` }), node('span', 'spacer'), button('수정', () => editBusiness(index)), button('삭제', () => {
+      if (!confirm(`‘${row.title}’ 기업을 삭제할까요? 이미지는 보관함에 남습니다.`)) return;
+      rows.splice(index, 1); rows.forEach((item, i) => item.order = i + 1); dirty(); render();
+    }, { className: 'danger' }));
+    content.append(actions); card.append(content); container.append(card);
+  });
+  if (!container.childElementCount) container.append(node('div', 'empty', '표시할 기업이 없습니다.'));
+}
+function businessPreviews() {
+  const form = element('business-form');
+  element('business-previews').replaceChildren(...lines(form.elements.namedItem('images').value).map(url => image(url, '기업 이미지')));
+}
+function editBusiness(index = null) {
+  if (state.busy) return;
+  editingBusiness = index;
+  const form = element('business-form'); form.reset();
+  const row = index === null ? { title: '', category: '쇼핑', description: '', images: [], phones: [], websites: [], address: '', sourceUrl: '' } : state.assets.businesses[index];
+  for (const field of ['title', 'category', 'description', 'address', 'sourceUrl']) form.elements.namedItem(field).value = row[field] || '';
+  for (const field of ['images', 'phones', 'websites']) form.elements.namedItem(field).value = row[field].join('\n');
+  element('business-editor-title').textContent = index === null ? '기업 추가' : '기업 수정';
+  businessPreviews(); element('business-editor').showModal();
+}
+element('business-add').addEventListener('click', () => editBusiness());
+element('business-search').addEventListener('input', renderBusinesses);
+element('business-category-filter').addEventListener('change', renderBusinesses);
+for (const id of ['business-close', 'business-cancel']) element(id).addEventListener('click', () => element('business-editor').close());
+element('business-form').elements.namedItem('images').addEventListener('input', businessPreviews);
+element('business-form').addEventListener('submit', async event => {
+  event.preventDefault();
+  const form = event.currentTarget, submit = form.querySelector('[type="submit"]'); submit.disabled = true;
+  const uploads = [];
+  try {
+    const rows = state.assets.businesses;
+    const row = editingBusiness === null ? { id: crypto.randomUUID(), order: rows.length + 1 } : { ...rows[editingBusiness] };
+    for (const field of ['title', 'category', 'description', 'address', 'sourceUrl']) row[field] = form.elements.namedItem(field).value.trim();
+    for (const field of ['images', 'phones', 'websites']) row[field] = lines(form.elements.namedItem(field).value);
+    const files = [...form.elements.namedItem('files').files];
+    if (files.reduce((sum, file) => sum + file.size, 0) > 20 * 1024 * 1024) throw new Error('한 번에 추가할 이미지는 총 20MB 이하여야 합니다.');
+    for (const file of files) {
+      if (file.size > maxImageBytes) throw new Error('이미지는 최대 5MB까지 올릴 수 있습니다.');
+      const extension = imageExtension(new Uint8Array(await file.arrayBuffer()));
+      const path = `businesses/${crypto.randomUUID()}.${extension}`;
+      const content = await new Promise((resolve, reject) => { const reader = new FileReader(); reader.onload = () => resolve(reader.result.split(',')[1]); reader.onerror = () => reject(new Error('이미지를 읽을 수 없습니다.')); reader.readAsDataURL(file); });
+      uploads.push({ path, content, preview: URL.createObjectURL(file), size: file.size }); row.images.push(cdnBase + path);
+    }
+    const next = structuredClone(state.assets);
+    if (editingBusiness === null) next.businesses.push(row); else next.businesses[editingBusiness] = row;
+    validateAssets(next);
+    uploads.forEach(upload => state.uploads.set(upload.path, upload));
+    state.assets = next; dirty(); render(); element('business-editor').close();
+  } catch (error) { uploads.forEach(upload => URL.revokeObjectURL(upload.preview)); alert(error.message); }
+  finally { submit.disabled = false; }
+});
 start();

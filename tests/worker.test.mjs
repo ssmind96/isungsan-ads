@@ -106,3 +106,33 @@ test('save creates one commit and updates the branch without forcing', async () 
     assert.deepEqual(mutations[2].body, { sha: 'updated-commit', force: false });
   } finally { globalThis.fetch = originalFetch; }
 });
+
+test('banner-only clients preserve the separately stored businesses and both JSON documents commit atomically', async () => {
+  const originalFetch = globalThis.fetch;
+  const business = { id: 'sample', order: 1, category: '음식', title: '기업', description: '', images: [], phones: [], websites: [], address: '' };
+  const mutations = [];
+  const encode = value => Buffer.from(JSON.stringify(value)).toString('base64');
+  globalThis.fetch = async (url, options) => {
+    if (options.method !== 'GET') {
+      const body = JSON.parse(options.body); mutations.push({ url, body });
+      return Response.json({ sha: url.endsWith('/git/trees') ? 'new-tree' : 'new-commit' });
+    }
+    if (url.includes('/git/ref/')) return Response.json({ object: { sha: 'head' } });
+    if (url.includes('/git/commits/')) return Response.json({ tree: { sha: 'tree' } });
+    if (url.includes('/git/trees/')) return Response.json({ tree: [{ type: 'blob', path: 'businesses.json' }] });
+    if (url.includes('/contents/businesses.json')) return Response.json({ content: encode({ businesses: [business] }) });
+    if (url.includes('/contents/assets.json')) return Response.json({ content: encode({ banners: [], retained: true }) });
+    return Response.json({ permissions: { push: true } });
+  };
+  try {
+    const session = await seal({ kind: 'session', token: 'test', exp: Date.now() + 60000 }, env);
+    const request = new Request('https://auth.example/api/save', { method: 'POST', headers: { Origin: origin, Authorization: `Bearer ${session}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ head: 'head', assets: { banners: [], retained: true }, uploads: [], deletions: [] }) });
+    const response = await worker.fetch(request, env);
+    assert.equal(response.status, 200);
+    const entries = mutations[0].body.tree;
+    assert.deepEqual(JSON.parse(entries.find(entry => entry.path === 'assets.json').content), { banners: [], retained: true });
+    assert.deepEqual(JSON.parse(entries.find(entry => entry.path === 'businesses.json').content), { businesses: [business] });
+    assert.equal(mutations.length, 3);
+    assert.equal(mutations[2].body.force, false);
+  } finally { globalThis.fetch = originalFetch; }
+});

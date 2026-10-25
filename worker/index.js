@@ -1,4 +1,4 @@
-import { repository, branch, validateChanges } from '../shared/model.js';
+import { repository, branch, validateChanges, normalizeBusinessCategory } from '../shared/model.js';
 
 const encoder = new TextEncoder();
 const decoder = new TextDecoder();
@@ -56,21 +56,32 @@ async function snapshot(token) {
   if (tree.truncated) throw new Error('저장소 파일 목록이 너무 큽니다.');
   const file = await github(token, `${repoPath}/contents/assets.json?ref=${ref.object.sha}`);
   const assets = JSON.parse(decoder.decode(Uint8Array.from(atob(file.content.replace(/\s/g, '')), character => character.charCodeAt(0))));
-  return { head: ref.object.sha, tree: commit.tree.sha, assets, files: tree.tree.filter(entry => entry.type === 'blob' && entry.path.startsWith('banners/')).map(entry => ({ path: entry.path, size: entry.size })) };
+  const businessFile = tree.tree.find(entry => entry.path === 'businesses.json');
+  if (businessFile) {
+    const file = await github(token, `${repoPath}/contents/businesses.json?ref=${ref.object.sha}`);
+    assets.businesses = JSON.parse(decoder.decode(Uint8Array.from(atob(file.content.replace(/\s/g, '')), character => character.charCodeAt(0)))).businesses;
+  } else assets.businesses = [];
+  return { head: ref.object.sha, tree: commit.tree.sha, assets, files: tree.tree.filter(entry => entry.type === 'blob' && (entry.path.startsWith('banners/') || entry.path.startsWith('businesses/'))).map(entry => ({ path: entry.path, size: entry.size })) };
 }
 
 async function save(token, body) {
   const current = await snapshot(token);
   if (body.head !== current.head) throw Object.assign(new Error('다른 관리자가 수정했습니다. 변경 내용을 복사하고 새로고침해 주세요.'), { status: 409 });
+  if (body.assets && body.assets.businesses === undefined) body.assets.businesses = current.assets.businesses;
   validateChanges(body.assets, body.uploads, body.deletions, current.assets, new Set(current.files.map(file => file.path)));
-  const entries = [{ path: 'assets.json', mode: '100644', type: 'blob', content: `${JSON.stringify(body.assets, null, 2)}\n` }];
+  const { businesses: businessRows, ...bannerAssets } = body.assets;
+  const businesses = businessRows.map(row => ({ ...row, category: normalizeBusinessCategory(row.category ?? current.assets.businesses.find(previous => previous.id === row.id)?.category, row.id) }));
+  const entries = [
+    { path: 'assets.json', mode: '100644', type: 'blob', content: `${JSON.stringify(bannerAssets, null, 2)}\n` },
+    { path: 'businesses.json', mode: '100644', type: 'blob', content: `${JSON.stringify({ businesses }, null, 2)}\n` },
+  ];
   for (const upload of body.uploads) {
     const blob = await github(token, `${repoPath}/git/blobs`, { content: upload.content, encoding: 'base64' });
     entries.push({ path: upload.path, mode: '100644', type: 'blob', sha: blob.sha });
   }
   for (const path of body.deletions) entries.push({ path, mode: '100644', type: 'blob', sha: null });
   const tree = await github(token, `${repoPath}/git/trees`, { base_tree: current.tree, tree: entries });
-  const commit = await github(token, `${repoPath}/git/commits`, { message: '배너 관리 화면에서 광고 업데이트', tree: tree.sha, parents: [current.head] });
+  const commit = await github(token, `${repoPath}/git/commits`, { message: '광고 관리 화면에서 배너 및 성도의 기업 업데이트', tree: tree.sha, parents: [current.head] });
   await github(token, `${repoPath}/git/refs/heads/${branch}`, { sha: commit.sha, force: false }, 'PATCH');
   return { head: commit.sha };
 }

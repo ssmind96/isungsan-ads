@@ -5,6 +5,10 @@ on:
     paths:
       - 'admin/**'
       - 'shared/**'
+      - 'assets.json'
+      - 'businesses.json'
+      - 'banners/**'
+      - 'businesses/**'
       - '.github/workflows/pages.yml'
   workflow_dispatch:
 permissions:
@@ -29,8 +33,8 @@ jobs:
         run: |
           mkdir -p _site
           cp -r admin shared _site/
-          cp assets.json _site/
-          cp -r banners _site/
+          cp assets.json businesses.json _site/
+          cp -r banners businesses _site/
           touch _site/.nojekyll
           node --input-type=module -e 'import fs from "node:fs"; if (process.env.AUTH_SERVER) { const url = new URL(process.env.AUTH_SERVER); if (url.protocol !== "https:") throw Error("ADS_AUTH_SERVER must use HTTPS"); fs.writeFileSync("_site/admin/config.js", `export const authServer = ${JSON.stringify(url.origin)};\n`); }'
           cp admin/redirect.html _site/index.html
