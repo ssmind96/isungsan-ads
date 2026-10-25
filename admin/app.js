@@ -2,7 +2,7 @@ import { authServer } from './config.js';
 import { cdnBase, imagePath, imageExtension, maxImageBytes, validateAssets, managedImages, normalizeBusinessCategory } from '../shared/model.js';
 
 const element = id => document.getElementById(id);
-const state = { section: 'banner', view: 'list', assets: null, head: '', files: [], uploads: new Map(), deletions: new Set(), dirty: false, busy: false, editing: null, preview: null };
+const state = { businessDraftUploads: new Map(), businessDraftVersion: 0, businessDraftBusy: false, section: 'banner', view: 'list', assets: null, head: '', files: [], uploads: new Map(), deletions: new Set(), dirty: false, busy: false, editing: null, preview: null };
 const labels = { active: '노출 중', scheduled: '노출 예정', expired: '노출 종료' };
 let session = sessionStorage.getItem('ads-session') || '';
 const fragment = new URLSearchParams(location.hash.slice(1));
@@ -39,7 +39,7 @@ function status(banner) { const date = today(); return banner.startDate > date ?
 function dateInput(value) { return `${value.slice(0, 4)}-${value.slice(4, 6)}-${value.slice(6, 8)}`; }
 function node(tag, className, text) { const result = document.createElement(tag); if (className) result.className = className; if (text !== undefined) result.textContent = text; return result; }
 function button(text, action, options = {}) { const result = node('button', options.className, text); result.type = 'button'; result.disabled = Boolean(options.disabled); if (options.label) result.setAttribute('aria-label', options.label); result.addEventListener('click', action); return result; }
-function preview(url) { const path = imagePath(url); if (path && state.uploads.has(path)) return state.uploads.get(path).preview; if (path && state.head) return `https://raw.githubusercontent.com/ssmind96/isungsan-ads/${state.head}/${path}`; return url; }
+function preview(url) { const path = imagePath(url); if (path && state.businessDraftUploads.has(path)) return state.businessDraftUploads.get(path).preview; if (path && state.uploads.has(path)) return state.uploads.get(path).preview; if (path && state.head) return `https://raw.githubusercontent.com/ssmind96/isungsan-ads/${state.head}/${path}`; return url; }
 function image(url, title) { const result = node('img', 'card-preview'); result.src = preview(url); result.alt = title; result.loading = 'lazy'; result.referrerPolicy = 'no-referrer'; return result; }
 
 function render() {
@@ -233,48 +233,146 @@ function renderBusinesses() {
   if (!container.childElementCount) container.append(node('div', 'empty', '표시할 기업이 없습니다.'));
 }
 function businessPreviews() {
-  const form = element('business-form');
-  element('business-previews').replaceChildren(...lines(form.elements.namedItem('images').value).map(url => image(url, '기업 이미지')));
+  element('business-previews').replaceChildren(...businessImageUrls().map(url => image(url, '기업 이미지')));
 }
-function editBusiness(index = null) {
-  if (state.busy) return;
-  editingBusiness = index;
-  const form = element('business-form'); form.reset();
-  const row = index === null ? { title: '', category: '쇼핑', memberName: '', memberRole: '', description: '', images: [], phones: [], websites: [], address: '', reservationUrl: '' } : state.assets.businesses[index];
-  for (const field of ['title', 'category', 'memberName', 'memberRole', 'description', 'address', 'reservationUrl']) form.elements.namedItem(field).value = row[field] || '';
-  for (const field of ['images', 'phones', 'websites']) form.elements.namedItem(field).value = row[field].join('\n');
-  element('business-editor-title').textContent = index === null ? '기업 추가' : '기업 수정';
-  businessPreviews(); element('business-editor').showModal();
+function updatePhoneRows() {
+  const rows = [...element('business-phones').children];
+  rows.forEach((row, index) => {
+    row.querySelector('input').setAttribute('aria-label', `전화번호 ${index + 1}`);
+    row.querySelector('button').setAttribute('aria-label', `전화번호 ${index + 1} 삭제`);
+  });
+  element('business-phone-add').disabled = rows.length >= 30;
 }
-element('business-add').addEventListener('click', () => editBusiness());
-element('business-search').addEventListener('input', renderBusinesses);
-element('business-category-filter').addEventListener('change', renderBusinesses);
-for (const id of ['business-close', 'business-cancel']) element(id).addEventListener('click', () => element('business-editor').close());
-element('business-form').elements.namedItem('images').addEventListener('input', businessPreviews);
-element('business-form').addEventListener('submit', async event => {
-  event.preventDefault();
-  const form = event.currentTarget, submit = form.querySelector('[type="submit"]'); submit.disabled = true;
-  const uploads = [];
+function addPhoneRow(value = '', focus = false) {
+  if (element('business-phones').childElementCount >= 30) return;
+  const row = node('div', 'phone-row');
+  const input = node('input'); input.type = 'tel'; input.name = 'phones'; input.maxLength = 40; input.placeholder = '010-1234-5678'; input.autocomplete = 'tel'; input.value = value;
+  const remove = button('', () => {
+    const next = row.nextElementSibling?.querySelector('input') || row.previousElementSibling?.querySelector('input');
+    row.remove(); updatePhoneRows(); (next || element('business-phone-add')).focus();
+  }, { className: 'danger phone-delete' });
+  remove.append(trashIcon());
+  row.append(input, remove); element('business-phones').append(row); updatePhoneRows();
+  if (focus) input.focus();
+}
+function trashIcon() {
+  const icon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  icon.setAttribute('viewBox', '0 0 24 24'); icon.setAttribute('width', '18'); icon.setAttribute('height', '18'); icon.setAttribute('fill', 'none'); icon.setAttribute('stroke', 'currentColor'); icon.setAttribute('stroke-width', '1.8'); icon.setAttribute('stroke-linecap', 'round'); icon.setAttribute('stroke-linejoin', 'round'); icon.setAttribute('aria-hidden', 'true');
+  const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+  path.setAttribute('d', 'M3 6h18M9 6V4h6v2M5 6l1 14h12l1-14M10 10v6M14 10v6'); icon.append(path);
+  return icon;
+}
+function businessImageUrls() {
+  return [...element('business-image-rows').querySelectorAll('input')].map(input => input.value.trim()).filter(Boolean);
+}
+function updateBusinessImageRows() {
+  const rows = [...element('business-image-rows').children];
+  rows.forEach((row, index) => {
+    row.querySelector('input').setAttribute('aria-label', `이미지 주소 ${index + 1}`);
+    const controls = row.querySelectorAll('button');
+    controls[0].disabled = index === 0; controls[0].setAttribute('aria-label', `이미지 ${index + 1} 위로`);
+    controls[1].disabled = index === rows.length - 1; controls[1].setAttribute('aria-label', `이미지 ${index + 1} 아래로`);
+    controls[2].disabled = rows.length >= 30; controls[2].setAttribute('aria-label', `이미지 ${index + 1} 뒤에 주소 추가`);
+    controls[3].setAttribute('aria-label', `이미지 ${index + 1} 삭제`);
+  });
+  element('business-image-add').disabled = rows.length >= 30;
+  businessPreviews();
+}
+function addBusinessImage(value = '', after = null, focus = false) {
+  const container = element('business-image-rows');
+  if (container.childElementCount >= 30) return;
+  const row = node('div', 'image-row');
+  const input = node('input'); input.type = 'url'; input.name = 'images'; input.maxLength = 2048; input.placeholder = 'https://…'; input.value = value;
+  input.addEventListener('change', businessPreviews);
+  const controls = node('div', 'image-row-actions');
+  const up = button('↑', () => { if (row.previousElementSibling) container.insertBefore(row, row.previousElementSibling); updateBusinessImageRows(); up.focus(); });
+  const down = button('↓', () => { if (row.nextElementSibling) container.insertBefore(row.nextElementSibling, row); updateBusinessImageRows(); down.focus(); });
+  const remove = button('', () => {
+    const next = row.nextElementSibling?.querySelector('input') || row.previousElementSibling?.querySelector('input');
+    row.remove(); updateBusinessImageRows(); (next || element('business-image-add')).focus();
+  }, { className: 'danger' }); remove.append(trashIcon());
+  controls.append(up, down, button('＋', () => addBusinessImage('', row, true)), remove);
+  row.append(input, controls); container.insertBefore(row, after ? after.nextSibling : null); updateBusinessImageRows();
+  if (focus) input.focus();
+}
+function clearBusinessDraft() {
+  state.businessDraftVersion++; state.businessDraftBusy = false;
+  for (const upload of state.businessDraftUploads.values()) URL.revokeObjectURL(upload.preview);
+  state.businessDraftUploads.clear();
+  const form = element('business-form'); form.elements.namedItem('files').disabled = false; form.querySelector('[type="submit"]').disabled = false;
+}
+async function addBusinessFiles(event) {
+  const input = event.currentTarget;
+  const files = [...input.files]; input.value = '';
+  if (!files.length || state.businessDraftBusy) return;
+  const version = state.businessDraftVersion;
+  const prepared = [];
+  state.businessDraftBusy = true; input.disabled = true; element('business-form').querySelector('[type="submit"]').disabled = true;
   try {
-    const rows = state.assets.businesses;
-    const row = editingBusiness === null ? { id: crypto.randomUUID(), order: rows.length + 1 } : { ...rows[editingBusiness] };
-    for (const field of ['title', 'category', 'memberName', 'memberRole', 'description', 'address', 'reservationUrl']) row[field] = form.elements.namedItem(field).value.trim();
-    for (const field of ['images', 'phones', 'websites']) row[field] = lines(form.elements.namedItem(field).value);
-    const files = [...form.elements.namedItem('files').files];
-    if (files.reduce((sum, file) => sum + file.size, 0) > 20 * 1024 * 1024) throw new Error('한 번에 추가할 이미지는 총 20MB 이하여야 합니다.');
+    if (element('business-image-rows').childElementCount + files.length > 30) throw new Error('기업 이미지는 최대 30장까지 등록할 수 있습니다.');
+    const usedPaths = new Set(businessImageUrls().map(imagePath));
+    const stagedBytes = [...state.businessDraftUploads.values()].filter(upload => usedPaths.has(upload.path)).reduce((sum, upload) => sum + upload.size, 0);
+    if (stagedBytes + files.reduce((sum, file) => sum + file.size, 0) > 20 * 1024 * 1024) throw new Error('한 번에 추가할 이미지는 총 20MB 이하여야 합니다.');
     for (const file of files) {
       if (file.size > maxImageBytes) throw new Error('이미지는 최대 5MB까지 올릴 수 있습니다.');
       const extension = imageExtension(new Uint8Array(await file.arrayBuffer()));
       const path = `businesses/${crypto.randomUUID()}.${extension}`;
       const content = await new Promise((resolve, reject) => { const reader = new FileReader(); reader.onload = () => resolve(reader.result.split(',')[1]); reader.onerror = () => reject(new Error('이미지를 읽을 수 없습니다.')); reader.readAsDataURL(file); });
-      uploads.push({ path, content, preview: URL.createObjectURL(file), size: file.size }); row.images.push(cdnBase + path);
+      prepared.push({ path, content, preview: URL.createObjectURL(file), size: file.size });
     }
+    if (version !== state.businessDraftVersion) { prepared.forEach(upload => URL.revokeObjectURL(upload.preview)); return; }
+    if (element('business-image-rows').childElementCount + prepared.length > 30) throw new Error('기업 이미지는 최대 30장까지 등록할 수 있습니다.');
+    for (const upload of prepared) { state.businessDraftUploads.set(upload.path, upload); addBusinessImage(cdnBase + upload.path); }
+  } catch (error) {
+    prepared.forEach(upload => URL.revokeObjectURL(upload.preview));
+    if (version === state.businessDraftVersion) alert(error.message);
+  } finally {
+    if (version === state.businessDraftVersion) { state.businessDraftBusy = false; input.disabled = false; element('business-form').querySelector('[type="submit"]').disabled = false; }
+  }
+}
+function editBusiness(index = null) {
+  if (state.busy) return;
+  editingBusiness = index; clearBusinessDraft();
+  const form = element('business-form'); form.reset();
+  const row = index === null ? { title: '', category: '쇼핑', memberName: '', memberRole: '', description: '', images: [], phones: [], websites: [], address: '', reservationUrl: '' } : state.assets.businesses[index];
+  for (const field of ['title', 'category', 'memberName', 'memberRole', 'description', 'address', 'reservationUrl']) form.elements.namedItem(field).value = row[field] || '';
+  form.elements.namedItem('websites').value = row.websites.join('\n');
+  element('business-image-rows').replaceChildren();
+  for (const url of row.images) addBusinessImage(url);
+  updateBusinessImageRows();
+  element('business-phones').replaceChildren();
+  for (const phone of row.phones.length ? row.phones : ['']) addPhoneRow(phone);
+  element('business-editor-title').textContent = index === null ? '기업 추가' : '기업 수정';
+  businessPreviews(); element('business-editor').showModal();
+}
+element('business-add').addEventListener('click', () => editBusiness());
+element('business-phone-add').addEventListener('click', () => addPhoneRow('', true));
+element('business-search').addEventListener('input', renderBusinesses);
+element('business-category-filter').addEventListener('change', renderBusinesses);
+for (const id of ['business-close', 'business-cancel']) element(id).addEventListener('click', () => element('business-editor').close());
+element('business-image-add').addEventListener('click', () => addBusinessImage('', null, true));
+element('business-form').elements.namedItem('files').addEventListener('change', addBusinessFiles);
+element('business-editor').addEventListener('close', clearBusinessDraft);
+element('business-form').addEventListener('submit', async event => {
+  event.preventDefault();
+  if (state.businessDraftBusy) return;
+  const form = event.currentTarget, submit = form.querySelector('[type="submit"]'); submit.disabled = true;
+  try {
+    const rows = state.assets.businesses;
+    const row = editingBusiness === null ? { id: crypto.randomUUID(), order: rows.length + 1 } : { ...rows[editingBusiness] };
+    for (const field of ['title', 'category', 'memberName', 'memberRole', 'description', 'address', 'reservationUrl']) row[field] = form.elements.namedItem(field).value.trim();
+    row.images = businessImageUrls();
+    row.websites = lines(form.elements.namedItem('websites').value);
+    row.phones = [...element('business-phones').querySelectorAll('input')].map(input => input.value.trim()).filter(Boolean);
     const next = structuredClone(state.assets);
     if (editingBusiness === null) next.businesses.push(row); else next.businesses[editingBusiness] = row;
     validateAssets(next);
-    uploads.forEach(upload => state.uploads.set(upload.path, upload));
+    for (const url of row.images) {
+      const path = imagePath(url);
+      if (path && state.businessDraftUploads.has(path)) { state.uploads.set(path, state.businessDraftUploads.get(path)); state.businessDraftUploads.delete(path); }
+    }
     state.assets = next; dirty(); render(); element('business-editor').close();
-  } catch (error) { uploads.forEach(upload => URL.revokeObjectURL(upload.preview)); alert(error.message); }
+  } catch (error) { alert(error.message); }
   finally { submit.disabled = false; }
 });
 start();

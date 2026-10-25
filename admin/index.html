@@ -43,12 +43,12 @@
 <div class="fields"><label>성도 이름 <small>선택 사항</small><input name="memberName" maxlength="100" placeholder="예: 홍길동"></label><label>성도 직분 <small>선택 사항</small><input name="memberRole" maxlength="50" placeholder="예: 집사"></label></div>
 <p class="muted">성도 이름과 직분은 정보로만 저장하며, 현재 앱 화면에는 표시하지 않습니다.</p>
 <label>본문<textarea name="description" rows="8" maxlength="20000"></textarea></label>
-<label>전화번호<textarea name="phones" rows="2" placeholder="한 줄에 한 번호"></textarea></label>
+<fieldset class="phone-field"><legend>전화번호</legend><div id="business-phones"></div><button type="button" id="business-phone-add">＋ 전화번호 추가</button><small>최대 30개까지 등록할 수 있습니다. 비워 둔 번호는 저장하지 않습니다.</small></fieldset>
 <label>주소<input name="address" maxlength="1000" placeholder="지도에서 검색할 주소"></label>
 <label>웹사이트<textarea name="websites" rows="2" placeholder="한 줄에 한 https:// 주소"></textarea></label>
 <label>예약 페이지 주소 <small>선택 사항</small><input name="reservationUrl" type="url" maxlength="2048" placeholder="https://…"><small>입력하면 앱에 ‘예약하기’ 버튼이 표시됩니다.</small></label>
 <label>이미지 추가<input name="files" type="file" accept="image/png,image/jpeg,image/webp,image/gif" multiple><small>여러 장 선택 가능 · 이미지당 5MB 이하 · 한 번에 총 20MB 이하</small></label>
-<label>이미지 주소<textarea name="images" rows="4" placeholder="한 줄에 한 주소 · 순서를 바꾸거나 줄을 지워 이미지를 관리하세요"></textarea></label><div id="business-previews" class="business-previews"></div>
+<fieldset class="image-field"><legend>이미지 주소</legend><div id="business-image-rows"></div><button type="button" id="business-image-add">＋ 이미지 주소 추가</button><small>파일을 추가하면 주소가 자동으로 들어갑니다. 오른쪽 버튼으로 추가·삭제·순서 변경이 가능합니다. 최대 30장입니다.</small></fieldset><div id="business-previews" class="business-previews"></div>
 <p class="muted">정보가 없는 항목은 비워 두세요. 앱에서는 해당 항목을 표시하지 않습니다.</p>
 <div class="dialog-actions"><button type="button" id="business-cancel">취소</button><button type="submit" class="primary">목록에 적용</button></div><p class="muted">목록에 적용한 뒤 ‘변경 사항 저장’을 눌러야 앱에 반영됩니다.</p></form></dialog>
 </body>

@@ -97,3 +97,13 @@ test('optional member metadata accepts empty/absent values and validates text le
   for (const metadata of [{}, { memberName: '', memberRole: '' }, { memberName: '홍길동', memberRole: '집사' }, { memberName: '가'.repeat(100), memberRole: '가'.repeat(50) }]) assert.doesNotThrow(() => validate(metadata));
   for (const metadata of [{ memberName: null }, { memberRole: 1 }, { memberName: '가'.repeat(101) }, { memberRole: '가'.repeat(51) }]) assert.throws(() => validate(metadata));
 });
+
+
+test('phone arrays support none, one and multiple entries up to the shared limit', () => {
+  for (const phones of [[], ['010-1234-5678'], ['010-1234-5678', '032-555-1234'], Array(30).fill('010-1234-5678')]) {
+    const value = { banners: [], businesses: [{ ...business(), phones }] };
+    assert.deepEqual(validateAssets(value).businesses[0].phones, phones);
+  }
+  assert.throws(() => validateAssets({ banners: [], businesses: [{ ...business(), phones: '010-1234-5678' }] }));
+  assert.throws(() => validateAssets({ banners: [], businesses: [{ ...business(), phones: Array(31).fill('010-1234-5678') }] }));
+});
