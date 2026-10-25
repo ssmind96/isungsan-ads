@@ -90,3 +90,10 @@ test('imported business data validates and every repository image exists with th
     }
   }
 });
+
+
+test('optional member metadata accepts empty/absent values and validates text lengths', () => {
+  const validate = metadata => validateAssets({ banners: [], businesses: [{ ...business(), ...metadata }] });
+  for (const metadata of [{}, { memberName: '', memberRole: '' }, { memberName: '홍길동', memberRole: '집사' }, { memberName: '가'.repeat(100), memberRole: '가'.repeat(50) }]) assert.doesNotThrow(() => validate(metadata));
+  for (const metadata of [{ memberName: null }, { memberRole: 1 }, { memberName: '가'.repeat(101) }, { memberRole: '가'.repeat(51) }]) assert.throws(() => validate(metadata));
+});

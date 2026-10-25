@@ -109,7 +109,7 @@ test('save creates one commit and updates the branch without forcing', async () 
 
 test('banner-only clients preserve the separately stored businesses and both JSON documents commit atomically', async () => {
   const originalFetch = globalThis.fetch;
-  const business = { id: 'sample', order: 1, category: '음식', reservationUrl: 'https://booking.example.com', title: '기업', description: '', images: [], phones: [], websites: [], address: '' };
+  const business = { id: 'sample', order: 1, category: '음식', reservationUrl: 'https://booking.example.com', memberName: '홍길동', memberRole: '집사', title: '기업', description: '', images: [], phones: [], websites: [], address: '' };
   const mutations = [];
   const encode = value => Buffer.from(JSON.stringify(value)).toString('base64');
   globalThis.fetch = async (url, options) => {

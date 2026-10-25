@@ -15,7 +15,9 @@
       "sourceUrl": "https://www.isungsan.net/board/view.do?iboardmanagerseq=128&iboardseq=983",
       "order": 1,
       "category": "음식",
-      "reservationUrl": ""
+      "reservationUrl": "",
+      "memberName": "",
+      "memberRole": ""
     },
     {
       "id": "956",
@@ -34,7 +36,9 @@
       "sourceUrl": "https://www.isungsan.net/board/view.do?iboardmanagerseq=128&iboardseq=956",
       "order": 2,
       "category": "쇼핑",
-      "reservationUrl": ""
+      "reservationUrl": "",
+      "memberName": "",
+      "memberRole": ""
     },
     {
       "id": "929",
@@ -53,7 +57,9 @@
       "sourceUrl": "https://www.isungsan.net/board/view.do?iboardmanagerseq=128&iboardseq=929",
       "order": 3,
       "category": "생활",
-      "reservationUrl": ""
+      "reservationUrl": "",
+      "memberName": "",
+      "memberRole": ""
     },
     {
       "id": "904",
@@ -70,7 +76,9 @@
       "sourceUrl": "https://www.isungsan.net/board/view.do?iboardmanagerseq=128&iboardseq=904",
       "order": 4,
       "category": "음식",
-      "reservationUrl": "https://m.site.naver.com/26w94"
+      "reservationUrl": "https://m.site.naver.com/26w94",
+      "memberName": "",
+      "memberRole": ""
     },
     {
       "id": "903",
@@ -87,7 +95,9 @@
       "sourceUrl": "https://www.isungsan.net/board/view.do?iboardmanagerseq=128&iboardseq=903",
       "order": 5,
       "category": "쇼핑",
-      "reservationUrl": ""
+      "reservationUrl": "",
+      "memberName": "",
+      "memberRole": ""
     },
     {
       "id": "892",
@@ -106,7 +116,9 @@
       "sourceUrl": "https://www.isungsan.net/board/view.do?iboardmanagerseq=128&iboardseq=892",
       "order": 6,
       "category": "생활",
-      "reservationUrl": ""
+      "reservationUrl": "",
+      "memberName": "",
+      "memberRole": ""
     },
     {
       "id": "839",
@@ -125,7 +137,9 @@
       "sourceUrl": "https://www.isungsan.net/board/view.do?iboardmanagerseq=128&iboardseq=839",
       "order": 7,
       "category": "생활",
-      "reservationUrl": ""
+      "reservationUrl": "",
+      "memberName": "",
+      "memberRole": ""
     },
     {
       "id": "711",
@@ -142,7 +156,9 @@
       "sourceUrl": "https://www.isungsan.net/board/view.do?iboardmanagerseq=128&iboardseq=711",
       "order": 8,
       "category": "건강",
-      "reservationUrl": ""
+      "reservationUrl": "",
+      "memberName": "",
+      "memberRole": ""
     },
     {
       "id": "702",
@@ -159,7 +175,9 @@
       "sourceUrl": "https://www.isungsan.net/board/view.do?iboardmanagerseq=128&iboardseq=702",
       "order": 9,
       "category": "생활",
-      "reservationUrl": ""
+      "reservationUrl": "",
+      "memberName": "",
+      "memberRole": ""
     },
     {
       "id": "585",
@@ -176,7 +194,9 @@
       "sourceUrl": "https://www.isungsan.net/board/view.do?iboardmanagerseq=128&iboardseq=585",
       "order": 10,
       "category": "교육",
-      "reservationUrl": ""
+      "reservationUrl": "",
+      "memberName": "",
+      "memberRole": ""
     },
     {
       "id": "584",
@@ -193,7 +213,9 @@
       "sourceUrl": "https://www.isungsan.net/board/view.do?iboardmanagerseq=128&iboardseq=584",
       "order": 11,
       "category": "건강",
-      "reservationUrl": ""
+      "reservationUrl": "",
+      "memberName": "",
+      "memberRole": ""
     },
     {
       "id": "563",
@@ -221,7 +243,9 @@
       "sourceUrl": "https://www.isungsan.net/board/view.do?iboardmanagerseq=128&iboardseq=563",
       "order": 12,
       "category": "쇼핑",
-      "reservationUrl": ""
+      "reservationUrl": "",
+      "memberName": "",
+      "memberRole": ""
     },
     {
       "id": "562",
@@ -247,7 +271,9 @@
       "sourceUrl": "https://www.isungsan.net/board/view.do?iboardmanagerseq=128&iboardseq=562",
       "order": 13,
       "category": "교육",
-      "reservationUrl": ""
+      "reservationUrl": "",
+      "memberName": "",
+      "memberRole": ""
     },
     {
       "id": "561",
@@ -267,7 +293,9 @@
       "sourceUrl": "https://www.isungsan.net/board/view.do?iboardmanagerseq=128&iboardseq=561",
       "order": 14,
       "category": "음식",
-      "reservationUrl": ""
+      "reservationUrl": "",
+      "memberName": "",
+      "memberRole": ""
     },
     {
       "id": "560",
@@ -290,7 +318,9 @@
       "sourceUrl": "https://www.isungsan.net/board/view.do?iboardmanagerseq=128&iboardseq=560",
       "order": 15,
       "category": "생활",
-      "reservationUrl": ""
+      "reservationUrl": "",
+      "memberName": "",
+      "memberRole": ""
     },
     {
       "id": "559",
@@ -311,7 +341,9 @@
       "sourceUrl": "https://www.isungsan.net/board/view.do?iboardmanagerseq=128&iboardseq=559",
       "order": 16,
       "category": "쇼핑",
-      "reservationUrl": ""
+      "reservationUrl": "",
+      "memberName": "",
+      "memberRole": ""
     },
     {
       "id": "558",
@@ -330,7 +362,9 @@
       "sourceUrl": "https://www.isungsan.net/board/view.do?iboardmanagerseq=128&iboardseq=558",
       "order": 17,
       "category": "음식",
-      "reservationUrl": ""
+      "reservationUrl": "",
+      "memberName": "",
+      "memberRole": ""
     },
     {
       "id": "557",
@@ -350,7 +384,9 @@
       "sourceUrl": "https://www.isungsan.net/board/view.do?iboardmanagerseq=128&iboardseq=557",
       "order": 18,
       "category": "쇼핑",
-      "reservationUrl": ""
+      "reservationUrl": "",
+      "memberName": "",
+      "memberRole": ""
     },
     {
       "id": "556",
@@ -367,7 +403,9 @@
       "sourceUrl": "https://www.isungsan.net/board/view.do?iboardmanagerseq=128&iboardseq=556",
       "order": 19,
       "category": "생활",
-      "reservationUrl": ""
+      "reservationUrl": "",
+      "memberName": "",
+      "memberRole": ""
     },
     {
       "id": "555",
@@ -389,7 +427,9 @@
       "sourceUrl": "https://www.isungsan.net/board/view.do?iboardmanagerseq=128&iboardseq=555",
       "order": 20,
       "category": "쇼핑",
-      "reservationUrl": ""
+      "reservationUrl": "",
+      "memberName": "",
+      "memberRole": ""
     },
     {
       "id": "554",
@@ -409,7 +449,9 @@
       "sourceUrl": "https://www.isungsan.net/board/view.do?iboardmanagerseq=128&iboardseq=554",
       "order": 21,
       "category": "음식",
-      "reservationUrl": ""
+      "reservationUrl": "",
+      "memberName": "",
+      "memberRole": ""
     },
     {
       "id": "553",
@@ -443,7 +485,9 @@
       "sourceUrl": "https://www.isungsan.net/board/view.do?iboardmanagerseq=128&iboardseq=553",
       "order": 22,
       "category": "쇼핑",
-      "reservationUrl": ""
+      "reservationUrl": "",
+      "memberName": "",
+      "memberRole": ""
     }
   ]
 }

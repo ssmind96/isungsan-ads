@@ -45,7 +45,7 @@ function image(url, title) { const result = node('img', 'card-preview'); result.
 function render() {
   const banners = state.assets.banners;
   element('total').textContent = banners.length;
-  element('active').textContent = banners.filter(banner => status(banner) === 'active').length;
+  for (const name of Object.keys(labels)) element(name).textContent = banners.filter(banner => status(banner) === name).length;
   element('banners').replaceChildren();
   banners.forEach((banner, index) => {
     const currentStatus = status(banner);
@@ -240,8 +240,8 @@ function editBusiness(index = null) {
   if (state.busy) return;
   editingBusiness = index;
   const form = element('business-form'); form.reset();
-  const row = index === null ? { title: '', category: '쇼핑', description: '', images: [], phones: [], websites: [], address: '', reservationUrl: '' } : state.assets.businesses[index];
-  for (const field of ['title', 'category', 'description', 'address', 'reservationUrl']) form.elements.namedItem(field).value = row[field] || '';
+  const row = index === null ? { title: '', category: '쇼핑', memberName: '', memberRole: '', description: '', images: [], phones: [], websites: [], address: '', reservationUrl: '' } : state.assets.businesses[index];
+  for (const field of ['title', 'category', 'memberName', 'memberRole', 'description', 'address', 'reservationUrl']) form.elements.namedItem(field).value = row[field] || '';
   for (const field of ['images', 'phones', 'websites']) form.elements.namedItem(field).value = row[field].join('\n');
   element('business-editor-title').textContent = index === null ? '기업 추가' : '기업 수정';
   businessPreviews(); element('business-editor').showModal();
@@ -258,7 +258,7 @@ element('business-form').addEventListener('submit', async event => {
   try {
     const rows = state.assets.businesses;
     const row = editingBusiness === null ? { id: crypto.randomUUID(), order: rows.length + 1 } : { ...rows[editingBusiness] };
-    for (const field of ['title', 'category', 'description', 'address', 'reservationUrl']) row[field] = form.elements.namedItem(field).value.trim();
+    for (const field of ['title', 'category', 'memberName', 'memberRole', 'description', 'address', 'reservationUrl']) row[field] = form.elements.namedItem(field).value.trim();
     for (const field of ['images', 'phones', 'websites']) row[field] = lines(form.elements.namedItem(field).value);
     const files = [...form.elements.namedItem('files').files];
     if (files.reduce((sum, file) => sum + file.size, 0) > 20 * 1024 * 1024) throw new Error('한 번에 추가할 이미지는 총 20MB 이하여야 합니다.');

@@ -114,6 +114,9 @@ export function validateBusinesses(rows) {
     normalizeBusinessCategory(row.category, row.id);
     if (typeof row.title !== 'string' || !row.title.trim() || row.title.length > 200) throw new Error('기업명을 200자 이내로 입력해 주세요.');
     if (!Number.isInteger(row.order) || row.order < 1) throw new Error('표시 순서는 양의 정수여야 합니다.');
+    for (const [field, limit] of [['memberName', 100], ['memberRole', 50]]) {
+      if (row[field] !== undefined && (typeof row[field] !== 'string' || row[field].length > limit)) throw new Error('성도 이름은 100자, 직분은 50자 이내로 입력해 주세요.');
+    }
     for (const [field, limit] of [['description', 20000], ['address', 1000]]) {
       if (typeof row[field] !== 'string' || row[field].length > limit) throw new Error('본문 또는 주소 길이를 확인해 주세요.');
     }
