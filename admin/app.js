@@ -45,7 +45,7 @@ function image(url, title) { const result = node('img', 'card-preview'); result.
 function render() {
   const banners = state.assets.banners;
   element('total').textContent = banners.length;
-  for (const name of Object.keys(labels)) element(name).textContent = banners.filter(banner => status(banner) === name).length;
+  element('active').textContent = banners.filter(banner => status(banner) === 'active').length;
   element('banners').replaceChildren();
   banners.forEach((banner, index) => {
     const currentStatus = status(banner);
@@ -204,8 +204,6 @@ function selectView(section, view) {
     element(`${name}-tab`).classList.toggle('selected', name === view);
     element(`${name}-tab`).setAttribute('aria-pressed', String(name === view));
   }
-  document.querySelector('.stats').hidden = section !== 'banner' || view !== 'list';
-  element('workspace-title').textContent = section === 'banner' ? '배너 관리' : '성도의 기업 관리';
 }
 for (const section of ['banner', 'business']) element(`${section}-tab`).addEventListener('click', () => selectView(section, 'list'));
 for (const view of ['list', 'image']) element(`${view}-tab`).addEventListener('click', () => selectView(state.section, view));
