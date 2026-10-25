@@ -6,6 +6,8 @@ on:
     paths:
       - "banners/**"
       - "assets.json"
+      - "businesses/**"
+      - "businesses.json"
   workflow_dispatch: {}
 
 jobs:
@@ -14,7 +16,7 @@ jobs:
     env:
       REPO: ${{ github.repository }}  # e.g. ssmind96/isungsan-ads
       BRANCH: main
-      WATCH_PATHS: "banners/** assets.json"
+      WATCH_PATHS: "banners/** assets.json businesses/** businesses.json"
 
     steps:
       - name: Check out
@@ -33,7 +35,7 @@ jobs:
           echo "before=$BEFORE" >> "$GITHUB_OUTPUT"
           echo "after=$AFTER"   >> "$GITHUB_OUTPUT"
 
-      - name: Collect changed files (banners/** & assets.json)
+      - name: Collect changed banner and business files
         id: files
         run: |
           set -e
@@ -43,6 +45,9 @@ jobs:
 
           # 매니페스트는 항상 함께 purge
           grep -qx "assets.json" changed.txt 2>/dev/null || echo "assets.json" >> changed.txt
+          if [ -f businesses.json ]; then
+            grep -qx "businesses.json" changed.txt 2>/dev/null || echo "businesses.json" >> changed.txt
+          fi
 
           # 존재하는 파일만 남기기(삭제된 항목 제외)
           awk 'system("[ -f \""$0"\" ]") == 0' changed.txt > changed_existing.txt || true
