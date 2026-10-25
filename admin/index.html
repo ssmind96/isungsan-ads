@@ -38,15 +38,15 @@
   </main>
   <dialog id="editor"><form id="banner-form"><div class="dialog-heading"><div><span class="eyebrow">BANNER DETAILS</span><h2 id="editor-title">배너 추가</h2></div><button type="button" id="close" aria-label="닫기">✕</button></div><label>제목<input name="title" required maxlength="200" placeholder="예: 가을 말씀 사경회"></label><label>배너 이미지<input name="file" type="file" accept="image/png,image/jpeg,image/webp,image/gif"><small>PNG, JPG, WebP, GIF · 최대 5MB</small></label><label>또는 이미지 주소<input name="image" type="url" placeholder="https://…"></label><img id="editor-preview" alt="배너 이미지 미리보기" hidden><div class="fields"><label>노출 시작일<input name="startDate" type="date" required></label><label>노출 종료일<input name="endDate" type="date" required></label></div><label>연결 주소 <small>선택 사항</small><input name="link" type="url" placeholder="https://…"></label><label class="color-field">배경색<input name="bgColor" type="color" value="#eeeeee"></label><div class="dialog-actions"><button type="button" id="cancel">취소</button><button type="submit" class="primary">목록에 적용</button></div><p class="muted">목록에 적용한 뒤 ‘변경 사항 저장’을 눌러야 앱에 반영됩니다.</p></form></dialog>
 <dialog id="business-editor"><form id="business-form"><div class="dialog-heading"><h2 id="business-editor-title">기업 추가</h2><button type="button" id="business-close" aria-label="닫기">✕</button></div>
-<label>기업명<input name="title" required maxlength="200"></label>
 <label>업종<select name="category" required><option>음식</option><option>생활</option><option>교육</option><option>건강</option><option selected>쇼핑</option></select></label>
+<label>기업명<input name="title" required maxlength="200"></label>
 <label>본문<textarea name="description" rows="8" maxlength="20000"></textarea></label>
+<label>전화번호<textarea name="phones" rows="2" placeholder="한 줄에 한 번호"></textarea></label>
+<label>주소<input name="address" maxlength="1000" placeholder="지도에서 검색할 주소"></label>
+<label>웹사이트<textarea name="websites" rows="2" placeholder="한 줄에 한 https:// 주소"></textarea></label>
+<label>예약 페이지 주소 <small>선택 사항</small><input name="reservationUrl" type="url" maxlength="2048" placeholder="https://…"><small>입력하면 앱에 ‘예약하기’ 버튼이 표시됩니다.</small></label>
 <label>이미지 추가<input name="files" type="file" accept="image/png,image/jpeg,image/webp,image/gif" multiple><small>여러 장 선택 가능 · 이미지당 5MB 이하 · 한 번에 총 20MB 이하</small></label>
 <label>이미지 주소<textarea name="images" rows="4" placeholder="한 줄에 한 주소 · 순서를 바꾸거나 줄을 지워 이미지를 관리하세요"></textarea></label><div id="business-previews" class="business-previews"></div>
-<label>전화번호<textarea name="phones" rows="2" placeholder="한 줄에 한 번호"></textarea></label>
-<label>웹사이트<textarea name="websites" rows="2" placeholder="한 줄에 한 https:// 주소"></textarea></label>
-<label>주소<input name="address" maxlength="1000" placeholder="지도에서 검색할 주소"></label>
-<label>예약 페이지 주소 <small>선택 사항</small><input name="reservationUrl" type="url" maxlength="2048" placeholder="https://…"><small>입력하면 앱에 ‘예약하기’ 버튼이 표시됩니다.</small></label>
 <p class="muted">정보가 없는 항목은 비워 두세요. 앱에서는 해당 항목을 표시하지 않습니다.</p>
 <div class="dialog-actions"><button type="button" id="business-cancel">취소</button><button type="submit" class="primary">목록에 적용</button></div><p class="muted">목록에 적용한 뒤 ‘변경 사항 저장’을 눌러야 앱에 반영됩니다.</p></form></dialog>
 </body>
