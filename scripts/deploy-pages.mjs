@@ -41,7 +41,7 @@ async function collect(directory) {
     if (entry.name.startsWith('.') || ['node_modules'].includes(entry.name) || entry.isSymbolicLink()) continue;
     const filename = `${directory}/${entry.name}`;
     if (entry.isDirectory()) paths.push(...await collect(filename));
-    else if (entry.isFile() && /\.(?:html|css|js|mjs|toml)$/.test(entry.name)) paths.push(filename);
+    else if (entry.isFile() && /\.(?:html|css|js|mjs|toml|png|ico)$/.test(entry.name)) paths.push(filename);
   }
   return paths;
 }
@@ -55,13 +55,16 @@ async function main() {
   if (current.truncated) throw new Error('저장소 파일 목록을 완전히 가져올 수 없습니다.');
   const existing = new Map(current.tree.map(entry => [entry.path, entry.sha]));
   const files = ['package.json', '.github/workflows/pages.yml'];
-  for (const directory of ['admin', 'shared', 'worker', 'scripts', 'tests']) files.push(...await collect(directory));
+  for (const directory of ['admin', 'shared', 'maps', 'worker', 'scripts', 'tests']) files.push(...await collect(directory));
   const changes = [];
   for (const filename of files) {
-    const content = await fs.readFile(path.join(root, filename), 'utf8');
-    const bytes = Buffer.from(content);
+    const bytes = await fs.readFile(path.join(root, filename));
     const sha = createHash('sha1').update(`blob ${bytes.length}\0`).update(bytes).digest('hex');
-    if (existing.get(filename) !== sha) changes.push({ path: filename, mode: '100644', type: 'blob', content });
+    if (existing.get(filename) === sha) continue;
+    if (/\.(png|ico)$/i.test(filename)) {
+      const blob = await github('git/blobs', { method: 'POST', body: { content: bytes.toString('base64'), encoding: 'base64' } });
+      changes.push({ path: filename, mode: '100644', type: 'blob', sha: blob.sha });
+    } else changes.push({ path: filename, mode: '100644', type: 'blob', content: bytes.toString('utf8') });
   }
   // Seed the new directory once; subsequent admin edits in GitHub remain authoritative.
   const seedPaths = ['businesses.json', ...(await fs.readdir(path.join(root, 'businesses'))).filter(name => /\.(png|jpe?g|webp|gif)$/i.test(name)).map(name => `businesses/${name}`)];

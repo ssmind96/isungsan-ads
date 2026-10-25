@@ -2,7 +2,7 @@ import { authServer } from './config.js';
 import { cdnBase, imagePath, imageExtension, maxImageBytes, validateAssets, managedImages, normalizeBusinessCategory } from '../shared/model.js';
 
 const element = id => document.getElementById(id);
-const state = { assets: null, head: '', files: [], uploads: new Map(), deletions: new Set(), dirty: false, busy: false, editing: null, preview: null };
+const state = { section: 'banner', view: 'list', assets: null, head: '', files: [], uploads: new Map(), deletions: new Set(), dirty: false, busy: false, editing: null, preview: null };
 const labels = { active: '노출 중', scheduled: '노출 예정', expired: '노출 종료' };
 let session = sessionStorage.getItem('ads-session') || '';
 const fragment = new URLSearchParams(location.hash.slice(1));
@@ -28,7 +28,7 @@ async function api(path, body) {
   const response = await fetch(`${authServer.replace(/\/$/, '')}${path}`, { method: body ? 'POST' : 'GET', headers: { Authorization: `Bearer ${session}`, ...(body ? { 'Content-Type': 'application/json' } : {}) }, body: body ? JSON.stringify(body) : undefined, cache: 'no-store', credentials: 'omit' });
   const result = await response.json();
   if (!response.ok) {
-    if (response.status === 401) { sessionStorage.removeItem('ads-session'); session = ''; element('login').hidden = false; element('workspace').hidden = true; }
+    if (response.status === 401) { sessionStorage.removeItem('ads-session'); session = ''; element('login').hidden = false; element('workspace').hidden = true; element('section-nav').hidden = true; }
     throw new Error(result.error || '요청에 실패했습니다.');
   }
   return result;
@@ -71,22 +71,24 @@ function render() {
 }
 
 function renderImages() {
-  element('images').replaceChildren();
   const files = [...state.files, ...Array.from(state.uploads, ([path]) => ({ path }))];
   const used = new Set(managedImages(state.assets).map(imagePath));
-  for (const file of files) {
-    if (!imagePath(cdnBase + file.path) || state.deletions.has(file.path)) continue;
-    const card = node('article', 'card'); card.append(image(cdnBase + file.path, file.path));
-    const content = node('div', 'card-content'); content.append(node('h3', '', file.path.split('/').pop()), node('p', '', used.has(file.path) ? '광고에서 사용 중' : '사용하지 않는 이미지'));
-    content.append(button('이미지 삭제', () => {
-      if (!confirm(`${file.path} 이미지를 삭제할까요? 저장 후에는 Git 이력에서 복구할 수 있습니다.`)) return;
-      const upload = state.uploads.get(file.path);
-      if (upload) { URL.revokeObjectURL(upload.preview); state.uploads.delete(file.path); } else state.deletions.add(file.path);
-      dirty(); renderImages();
-    }, { disabled: used.has(file.path), className: 'danger' }));
-    card.append(content); element('images').append(card);
+  for (const [folder, containerId] of [['banners/', 'banner-images'], ['businesses/', 'business-images']]) {
+    const container = element(containerId); container.replaceChildren();
+    for (const file of files) {
+      if (!file.path.startsWith(folder) || !imagePath(cdnBase + file.path) || state.deletions.has(file.path)) continue;
+      const card = node('article', 'card'); card.append(image(cdnBase + file.path, file.path));
+      const content = node('div', 'card-content'); content.append(node('h3', '', file.path.split('/').pop()), node('p', '', used.has(file.path) ? '광고에서 사용 중' : '사용하지 않는 이미지'));
+      content.append(button('이미지 삭제', () => {
+        if (!confirm(`${file.path} 이미지를 삭제할까요? 저장 후에는 Git 이력에서 복구할 수 있습니다.`)) return;
+        const upload = state.uploads.get(file.path);
+        if (upload) { URL.revokeObjectURL(upload.preview); state.uploads.delete(file.path); } else state.deletions.add(file.path);
+        dirty(); renderImages();
+      }, { disabled: used.has(file.path), className: 'danger' }));
+      card.append(content); container.append(card);
+    }
+    if (!container.childElementCount) container.append(node('div', 'empty', '보관 중인 이미지가 없습니다.'));
   }
-  if (!element('images').childElementCount) element('images').append(node('div', 'empty', '보관 중인 이미지가 없습니다.'));
 }
 
 function renumber() { state.assets.banners.forEach((banner, index) => { banner.order = index + 1; }); }
@@ -160,7 +162,7 @@ async function start() {
       if (state.dirty && !confirm('저장하지 않은 변경 사항이 사라집니다. 로그아웃할까요?')) return;
       sessionStorage.removeItem('ads-session'); location.reload();
     }));
-    element('login').hidden = true; element('workspace').hidden = false;
+    element('login').hidden = true; element('workspace').hidden = false; element('section-nav').hidden = false;
   } catch (error) { notice(error.message, true); }
 }
 
@@ -172,14 +174,14 @@ element('save').addEventListener('click', async () => {
     const uploads = Array.from(state.uploads.values()).filter(upload => used.has(upload.path));
     if (uploads.reduce((sum, upload) => sum + upload.size, 0) > 20 * 1024 * 1024) throw new Error('한 번에 저장할 이미지는 총 20MB 이하여야 합니다.');
     state.busy = true;
-    element('workspace').inert = true;
+    element('workspace').inert = true; element('section-nav').inert = true;
     element('save').textContent = '저장 중…';
     const result = await api('/api/save', { head: state.head, assets: state.assets, uploads: uploads.map(({ path, content }) => ({ path, content })), deletions: [...state.deletions] });
     state.head = result.head; state.dirty = false;
     notice('저장했습니다. 앱 반영까지 CDN 갱신 시간이 걸릴 수 있습니다.');
     try { await load(); } catch { element('save').disabled = true; element('save').textContent = '저장 완료'; notice('저장은 완료되었습니다. 최신 목록을 가져오지 못했습니다. 새로고침해 주세요.', true); }
   } catch (error) { notice(error.message, true); element('save').textContent = '변경 사항 저장 ·'; }
-  finally { state.busy = false; element('workspace').inert = false; }
+  finally { state.busy = false; element('workspace').inert = false; element('section-nav').inert = false; }
 });
 
 element('login-button').addEventListener('click', () => { location.href = `${authServer.replace(/\/$/, '')}/auth/login`; });
@@ -189,10 +191,24 @@ for (const id of ['close', 'cancel']) element(id).addEventListener('click', () =
 element('editor').addEventListener('close', () => { if (state.preview) { URL.revokeObjectURL(state.preview); state.preview = null; } });
 for (const field of ['file', 'image']) element('banner-form').elements.namedItem(field).addEventListener('change', updatePreview);
 for (const id of ['search', 'filter']) element(id).addEventListener('input', render);
-for (const tab of ['banner', 'business', 'image']) element(`${tab}-tab`).addEventListener('click', () => {
-  document.querySelector('.stats').hidden = tab !== 'banner';
-  for (const name of ['banner', 'business', 'image']) { const active = name === tab; element(`${name}-panel`).hidden = !active; element(`${name}-tab`).classList.toggle('selected', active); element(`${name}-tab`).setAttribute('aria-pressed', String(active)); }
-});
+function selectView(section, view) {
+  state.section = section; state.view = view;
+  for (const name of ['banner', 'business']) {
+    const active = name === section;
+    element(`${name}-tab`).classList.toggle('selected', active);
+    element(`${name}-tab`).setAttribute('aria-pressed', String(active));
+    element(`${name}-panel`).hidden = !active || view !== 'list';
+    element(`${name}-image-panel`).hidden = !active || view !== 'image';
+  }
+  for (const name of ['list', 'image']) {
+    element(`${name}-tab`).classList.toggle('selected', name === view);
+    element(`${name}-tab`).setAttribute('aria-pressed', String(name === view));
+  }
+  document.querySelector('.stats').hidden = section !== 'banner' || view !== 'list';
+  element('workspace-title').textContent = section === 'banner' ? '배너 관리' : '성도의 기업 관리';
+}
+for (const section of ['banner', 'business']) element(`${section}-tab`).addEventListener('click', () => selectView(section, 'list'));
+for (const view of ['list', 'image']) element(`${view}-tab`).addEventListener('click', () => selectView(state.section, view));
 window.addEventListener('beforeunload', event => { if (state.dirty || state.busy) { event.preventDefault(); event.returnValue = ''; } });
 
 
@@ -226,8 +242,8 @@ function editBusiness(index = null) {
   if (state.busy) return;
   editingBusiness = index;
   const form = element('business-form'); form.reset();
-  const row = index === null ? { title: '', category: '쇼핑', description: '', images: [], phones: [], websites: [], address: '', sourceUrl: '' } : state.assets.businesses[index];
-  for (const field of ['title', 'category', 'description', 'address', 'sourceUrl']) form.elements.namedItem(field).value = row[field] || '';
+  const row = index === null ? { title: '', category: '쇼핑', description: '', images: [], phones: [], websites: [], address: '', reservationUrl: '' } : state.assets.businesses[index];
+  for (const field of ['title', 'category', 'description', 'address', 'reservationUrl']) form.elements.namedItem(field).value = row[field] || '';
   for (const field of ['images', 'phones', 'websites']) form.elements.namedItem(field).value = row[field].join('\n');
   element('business-editor-title').textContent = index === null ? '기업 추가' : '기업 수정';
   businessPreviews(); element('business-editor').showModal();
@@ -244,7 +260,7 @@ element('business-form').addEventListener('submit', async event => {
   try {
     const rows = state.assets.businesses;
     const row = editingBusiness === null ? { id: crypto.randomUUID(), order: rows.length + 1 } : { ...rows[editingBusiness] };
-    for (const field of ['title', 'category', 'description', 'address', 'sourceUrl']) row[field] = form.elements.namedItem(field).value.trim();
+    for (const field of ['title', 'category', 'description', 'address', 'reservationUrl']) row[field] = form.elements.namedItem(field).value.trim();
     for (const field of ['images', 'phones', 'websites']) row[field] = lines(form.elements.namedItem(field).value);
     const files = [...form.elements.namedItem('files').files];
     if (files.reduce((sum, file) => sum + file.size, 0) > 20 * 1024 * 1024) throw new Error('한 번에 추가할 이미지는 총 20MB 이하여야 합니다.');

@@ -58,8 +58,9 @@ const business = () => ({ id: 'example', order: 1, category: '쇼핑', title: '�
 test('business fields accept missing optional information and reject unsafe links, malformed contacts and duplicate IDs', () => {
   const value = { banners: [], businesses: [business()] };
   assert.doesNotThrow(() => validateAssets(value));
+  for (const reservationUrl of ['', 'https://booking.example.com']) assert.doesNotThrow(() => validateAssets({ banners: [], businesses: [{ ...business(), reservationUrl }] }));
   assert.doesNotThrow(() => validateAssets({ banners: [], businesses: [{ ...business(), images: [], phones: [] }] }));
-  for (const change of [{ category: '알 수 없는 업종' }, { category: null }, { websites: ['javascript:alert(1)'] }, { images: ['file:///private/photo.jpg'] }, { phones: ['123;456'] }, { description: null }, { order: 0 }]) {
+  for (const change of [{ category: '알 수 없는 업종' }, { category: null }, { reservationUrl: 'javascript:alert(1)' }, { reservationUrl: 'https://user:password@example.com' }, { reservationUrl: 123 }, { websites: ['javascript:alert(1)'] }, { images: ['file:///private/photo.jpg'] }, { phones: ['123;456'] }, { description: null }, { order: 0 }]) {
     assert.throws(() => validateAssets({ banners: [], businesses: [{ ...business(), ...change }] }));
   }
   assert.throws(() => validateAssets({ banners: [], businesses: [business(), business()] }));

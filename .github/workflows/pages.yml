@@ -5,6 +5,7 @@ on:
     paths:
       - 'admin/**'
       - 'shared/**'
+      - 'maps/**'
       - 'assets.json'
       - 'businesses.json'
       - 'banners/**'
@@ -32,7 +33,7 @@ jobs:
           AUTH_SERVER: ${{ vars.ADS_AUTH_SERVER }}
         run: |
           mkdir -p _site
-          cp -r admin shared _site/
+          cp -r admin shared maps _site/
           cp assets.json businesses.json _site/
           cp -r banners businesses _site/
           touch _site/.nojekyll

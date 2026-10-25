@@ -14,7 +14,8 @@
       "address": "인천 남동구 독곡로6번길 4, 102호",
       "sourceUrl": "https://www.isungsan.net/board/view.do?iboardmanagerseq=128&iboardseq=983",
       "order": 1,
-      "category": "음식"
+      "category": "음식",
+      "reservationUrl": ""
     },
     {
       "id": "956",
@@ -32,7 +33,8 @@
       "address": "인천광역시 미추홀구 장천로112번길 44 스카이시티 201동 101-1호",
       "sourceUrl": "https://www.isungsan.net/board/view.do?iboardmanagerseq=128&iboardseq=956",
       "order": 2,
-      "category": "쇼핑"
+      "category": "쇼핑",
+      "reservationUrl": ""
     },
     {
       "id": "929",
@@ -50,7 +52,8 @@
       "address": "",
       "sourceUrl": "https://www.isungsan.net/board/view.do?iboardmanagerseq=128&iboardseq=929",
       "order": 3,
-      "category": "생활"
+      "category": "생활",
+      "reservationUrl": ""
     },
     {
       "id": "904",
@@ -62,13 +65,12 @@
       "phones": [
         "010-5414-8715"
       ],
-      "websites": [
-        "https://m.site.naver.com/26w94"
-      ],
+      "websites": [],
       "address": "매소홀로 1129 타미드비전센터 2층",
       "sourceUrl": "https://www.isungsan.net/board/view.do?iboardmanagerseq=128&iboardseq=904",
       "order": 4,
-      "category": "음식"
+      "category": "음식",
+      "reservationUrl": "https://m.site.naver.com/26w94"
     },
     {
       "id": "903",
@@ -84,7 +86,8 @@
       "address": "",
       "sourceUrl": "https://www.isungsan.net/board/view.do?iboardmanagerseq=128&iboardseq=903",
       "order": 5,
-      "category": "쇼핑"
+      "category": "쇼핑",
+      "reservationUrl": ""
     },
     {
       "id": "892",
@@ -102,7 +105,8 @@
       "address": "",
       "sourceUrl": "https://www.isungsan.net/board/view.do?iboardmanagerseq=128&iboardseq=892",
       "order": 6,
-      "category": "생활"
+      "category": "생활",
+      "reservationUrl": ""
     },
     {
       "id": "839",
@@ -120,7 +124,8 @@
       "address": "",
       "sourceUrl": "https://www.isungsan.net/board/view.do?iboardmanagerseq=128&iboardseq=839",
       "order": 7,
-      "category": "생활"
+      "category": "생활",
+      "reservationUrl": ""
     },
     {
       "id": "711",
@@ -136,7 +141,8 @@
       "address": "서창1지구 서창초등학교 근처 공영주차장 맞은편",
       "sourceUrl": "https://www.isungsan.net/board/view.do?iboardmanagerseq=128&iboardseq=711",
       "order": 8,
-      "category": "건강"
+      "category": "건강",
+      "reservationUrl": ""
     },
     {
       "id": "702",
@@ -152,7 +158,8 @@
       "address": "이마트 24시 2층  < 사진 >",
       "sourceUrl": "https://www.isungsan.net/board/view.do?iboardmanagerseq=128&iboardseq=702",
       "order": 9,
-      "category": "생활"
+      "category": "생활",
+      "reservationUrl": ""
     },
     {
       "id": "585",
@@ -168,7 +175,8 @@
       "address": "",
       "sourceUrl": "https://www.isungsan.net/board/view.do?iboardmanagerseq=128&iboardseq=585",
       "order": 10,
-      "category": "교육"
+      "category": "교육",
+      "reservationUrl": ""
     },
     {
       "id": "584",
@@ -184,7 +192,8 @@
       "address": "",
       "sourceUrl": "https://www.isungsan.net/board/view.do?iboardmanagerseq=128&iboardseq=584",
       "order": 11,
-      "category": "건강"
+      "category": "건강",
+      "reservationUrl": ""
     },
     {
       "id": "563",
@@ -211,7 +220,8 @@
       "address": "인천 남동구 매소홀로 1129 204호",
       "sourceUrl": "https://www.isungsan.net/board/view.do?iboardmanagerseq=128&iboardseq=563",
       "order": 12,
-      "category": "쇼핑"
+      "category": "쇼핑",
+      "reservationUrl": ""
     },
     {
       "id": "562",
@@ -236,7 +246,8 @@
       "address": "인천 연수구 송도과학로 27번길 55, A동 309, 202호",
       "sourceUrl": "https://www.isungsan.net/board/view.do?iboardmanagerseq=128&iboardseq=562",
       "order": 13,
-      "category": "교육"
+      "category": "교육",
+      "reservationUrl": ""
     },
     {
       "id": "561",
@@ -255,7 +266,8 @@
       "address": "인천 남동구 매소홀로 1127 1층",
       "sourceUrl": "https://www.isungsan.net/board/view.do?iboardmanagerseq=128&iboardseq=561",
       "order": 14,
-      "category": "음식"
+      "category": "음식",
+      "reservationUrl": ""
     },
     {
       "id": "560",
@@ -277,7 +289,8 @@
       "address": "인천 미추홀구 장천로112번길44 스카이시티 201동101-1호",
       "sourceUrl": "https://www.isungsan.net/board/view.do?iboardmanagerseq=128&iboardseq=560",
       "order": 15,
-      "category": "생활"
+      "category": "생활",
+      "reservationUrl": ""
     },
     {
       "id": "559",
@@ -297,7 +310,8 @@
       "address": "인천시 남동구 비류대로 763 남촌농산물도매시장 식자재동 2층 204호",
       "sourceUrl": "https://www.isungsan.net/board/view.do?iboardmanagerseq=128&iboardseq=559",
       "order": 16,
-      "category": "쇼핑"
+      "category": "쇼핑",
+      "reservationUrl": ""
     },
     {
       "id": "558",
@@ -315,7 +329,8 @@
       "address": "인천 남동구 매소홀로 1129 203호",
       "sourceUrl": "https://www.isungsan.net/board/view.do?iboardmanagerseq=128&iboardseq=558",
       "order": 17,
-      "category": "음식"
+      "category": "음식",
+      "reservationUrl": ""
     },
     {
       "id": "557",
@@ -334,7 +349,8 @@
       "address": "인천시 남동구 장아산로 158 111-103",
       "sourceUrl": "https://www.isungsan.net/board/view.do?iboardmanagerseq=128&iboardseq=557",
       "order": 18,
-      "category": "쇼핑"
+      "category": "쇼핑",
+      "reservationUrl": ""
     },
     {
       "id": "556",
@@ -350,7 +366,8 @@
       "address": "경기도 부천시 역곡로 40-2",
       "sourceUrl": "https://www.isungsan.net/board/view.do?iboardmanagerseq=128&iboardseq=556",
       "order": 19,
-      "category": "생활"
+      "category": "생활",
+      "reservationUrl": ""
     },
     {
       "id": "555",
@@ -371,7 +388,8 @@
       "address": "경기도 파주시 문향로 39",
       "sourceUrl": "https://www.isungsan.net/board/view.do?iboardmanagerseq=128&iboardseq=555",
       "order": 20,
-      "category": "쇼핑"
+      "category": "쇼핑",
+      "reservationUrl": ""
     },
     {
       "id": "554",
@@ -390,7 +408,8 @@
       "address": "인천시 남동구 서창동 매소홀로 1129",
       "sourceUrl": "https://www.isungsan.net/board/view.do?iboardmanagerseq=128&iboardseq=554",
       "order": 21,
-      "category": "음식"
+      "category": "음식",
+      "reservationUrl": ""
     },
     {
       "id": "553",
@@ -423,7 +442,8 @@
       "address": "인천 남동구 은청로4-19 남동공단산업용품상가 D동 238호",
       "sourceUrl": "https://www.isungsan.net/board/view.do?iboardmanagerseq=128&iboardseq=553",
       "order": 22,
-      "category": "쇼핑"
+      "category": "쇼핑",
+      "reservationUrl": ""
     }
   ]
 }

@@ -120,8 +120,9 @@ export function validateBusinesses(rows) {
     for (const field of ['images', 'phones', 'websites']) {
       if (!Array.isArray(row[field]) || row[field].length > 30 || row[field].some(value => typeof value !== 'string' || !value.trim())) throw new Error('이미지, 전화번호, 웹사이트 목록을 확인해 주세요.');
     }
+    if (row.reservationUrl !== undefined && (typeof row.reservationUrl !== 'string' || row.reservationUrl.length > 2048)) throw new Error('예약 페이지 주소를 확인해 주세요.');
     if (row.phones.some(value => !/^\+?[0-9() .-]{3,40}$/.test(value))) throw new Error('전화번호 형식을 확인해 주세요.');
-    for (const value of [...row.images, ...row.websites, ...(row.sourceUrl ? [row.sourceUrl] : [])]) {
+    for (const value of [...row.images, ...row.websites, ...(row.reservationUrl ? [row.reservationUrl] : []), ...(row.sourceUrl ? [row.sourceUrl] : [])]) {
       let url;
       try { url = new URL(value); } catch { throw new Error('올바른 이미지 및 웹사이트 주소를 입력해 주세요.'); }
       if (!['https:', 'http:'].includes(url.protocol) || url.username || url.password) throw new Error('주소는 http 또는 https로 시작해야 합니다.');
