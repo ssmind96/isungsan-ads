@@ -368,7 +368,7 @@ element('business-form').addEventListener('submit', async event => {
   const form = event.currentTarget, submit = form.querySelector('[type="submit"]'); submit.disabled = true;
   try {
     const rows = state.assets.businesses;
-    const row = editingBusiness === null ? { id: crypto.randomUUID(), order: rows.length + 1 } : { ...rows[editingBusiness] };
+    const row = editingBusiness === null ? { id: crypto.randomUUID(), order: 1 } : { ...rows[editingBusiness] };
     for (const field of ['title', 'category', 'memberName', 'memberRole', 'description', 'address', 'actionUrl']) row[field] = form.elements.namedItem(field).value.trim();
     row.actionType = form.elements.namedItem('actionType').value;
     row.reservationUrl = row.actionType === 'reservation' ? row.actionUrl : '';
@@ -376,7 +376,10 @@ element('business-form').addEventListener('submit', async event => {
     row.websites = lines(form.elements.namedItem('websites').value);
     row.phones = [...element('business-phones').querySelectorAll('input')].map(input => input.value.trim()).filter(Boolean);
     const next = structuredClone(state.assets);
-    if (editingBusiness === null) next.businesses.push(row); else next.businesses[editingBusiness] = row;
+    if (editingBusiness === null) {
+      next.businesses.unshift(row);
+      next.businesses.forEach((item, index) => { item.order = index + 1; });
+    } else next.businesses[editingBusiness] = row;
     validateAssets(next);
     for (const url of row.images) {
       const path = imagePath(url);
