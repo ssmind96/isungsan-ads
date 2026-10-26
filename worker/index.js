@@ -1,4 +1,4 @@
-import { repository, branch, validateChanges, normalizeBusinessCategory } from '../shared/model.js';
+import { repository, branch, validateChanges, normalizeBusinessCategory, getBusinessAction } from '../shared/model.js';
 
 const encoder = new TextEncoder();
 const decoder = new TextDecoder();
@@ -70,7 +70,10 @@ async function save(token, body) {
   if (body.assets && body.assets.businesses === undefined) body.assets.businesses = current.assets.businesses;
   validateChanges(body.assets, body.uploads, body.deletions, current.assets, new Set(current.files.map(file => file.path)));
   const { businesses: businessRows, ...bannerAssets } = body.assets;
-  const businesses = businessRows.map(row => ({ ...row, category: normalizeBusinessCategory(row.category ?? current.assets.businesses.find(previous => previous.id === row.id)?.category, row.id) }));
+  const businesses = businessRows.map(row => {
+    const action = getBusinessAction(row);
+    return { ...row, category: normalizeBusinessCategory(row.category ?? current.assets.businesses.find(previous => previous.id === row.id)?.category, row.id), actionType: action.type, actionUrl: action.url, reservationUrl: action.type === 'reservation' ? action.url : '' };
+  });
   const entries = [
     { path: 'assets.json', mode: '100644', type: 'blob', content: `${JSON.stringify(bannerAssets, null, 2)}\n` },
     { path: 'businesses.json', mode: '100644', type: 'blob', content: `${JSON.stringify({ businesses }, null, 2)}\n` },

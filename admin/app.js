@@ -1,5 +1,5 @@
 import { authServer } from './config.js';
-import { cdnBase, imagePath, imageExtension, maxImageBytes, validateAssets, managedImages, normalizeBusinessCategory } from '../shared/model.js';
+import { cdnBase, imagePath, imageExtension, maxImageBytes, validateAssets, managedImages, normalizeBusinessCategory, getBusinessAction } from '../shared/model.js?v=action-type-1';
 
 const element = id => document.getElementById(id);
 const state = { businessDraftUploads: new Map(), businessDraftVersion: 0, businessDraftBusy: false, section: 'banner', view: 'list', assets: null, head: '', files: [], uploads: new Map(), deletions: new Set(), dirty: false, busy: false, editing: null, preview: null };
@@ -330,12 +330,20 @@ async function addBusinessFiles(event) {
     if (version === state.businessDraftVersion) { state.businessDraftBusy = false; input.disabled = false; element('business-form').querySelector('[type="submit"]').disabled = false; }
   }
 }
+function updateBusinessActionFields() {
+  const type = element('business-form').elements.namedItem('actionType').value;
+  const label = type === 'purchase' ? '구매' : '예약';
+  element('business-action-url-label').textContent = `${label} 페이지 주소`;
+  element('business-action-url-hint').textContent = `주소를 입력하면 앱의 ‘${label}’ 버튼을 사용할 수 있습니다. 비워 두면 비활성화됩니다.`;
+}
 function editBusiness(index = null) {
   if (state.busy) return;
   editingBusiness = index; clearBusinessDraft();
   const form = element('business-form'); form.reset();
-  const row = index === null ? { title: '', category: '쇼핑', memberName: '', memberRole: '', description: '', images: [], phones: [], websites: [], address: '', reservationUrl: '' } : state.assets.businesses[index];
-  for (const field of ['title', 'category', 'memberName', 'memberRole', 'description', 'address', 'reservationUrl']) form.elements.namedItem(field).value = row[field] || '';
+  const row = index === null ? { title: '', category: '쇼핑', memberName: '', memberRole: '', description: '', images: [], phones: [], websites: [], address: '', actionType: 'reservation', actionUrl: '' } : state.assets.businesses[index];
+  for (const field of ['title', 'category', 'memberName', 'memberRole', 'description', 'address']) form.elements.namedItem(field).value = row[field] || '';
+  const action = getBusinessAction(row);
+  form.elements.namedItem('actionType').value = action.type; form.elements.namedItem('actionUrl').value = action.url; updateBusinessActionFields();
   form.elements.namedItem('websites').value = row.websites.join('\n');
   element('business-image-rows').replaceChildren();
   for (const url of row.images) addBusinessImage(url);
@@ -350,6 +358,7 @@ element('business-phone-add').addEventListener('click', () => addPhoneRow('', tr
 element('business-search').addEventListener('input', renderBusinesses);
 element('business-category-filter').addEventListener('change', renderBusinesses);
 for (const id of ['business-close', 'business-cancel']) element(id).addEventListener('click', () => element('business-editor').close());
+for (const radio of element('business-form').querySelectorAll('[name="actionType"]')) radio.addEventListener('change', updateBusinessActionFields);
 element('business-image-add').addEventListener('click', () => addBusinessImage('', null, true));
 element('business-form').elements.namedItem('files').addEventListener('change', addBusinessFiles);
 element('business-editor').addEventListener('close', clearBusinessDraft);
@@ -360,7 +369,9 @@ element('business-form').addEventListener('submit', async event => {
   try {
     const rows = state.assets.businesses;
     const row = editingBusiness === null ? { id: crypto.randomUUID(), order: rows.length + 1 } : { ...rows[editingBusiness] };
-    for (const field of ['title', 'category', 'memberName', 'memberRole', 'description', 'address', 'reservationUrl']) row[field] = form.elements.namedItem(field).value.trim();
+    for (const field of ['title', 'category', 'memberName', 'memberRole', 'description', 'address', 'actionUrl']) row[field] = form.elements.namedItem(field).value.trim();
+    row.actionType = form.elements.namedItem('actionType').value;
+    row.reservationUrl = row.actionType === 'reservation' ? row.actionUrl : '';
     row.images = businessImageUrls();
     row.websites = lines(form.elements.namedItem('websites').value);
     row.phones = [...element('business-phones').querySelectorAll('input')].map(input => input.value.trim()).filter(Boolean);

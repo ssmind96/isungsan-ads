@@ -19,7 +19,9 @@
       "category": "음식",
       "reservationUrl": "https://naver.me/5NeXkjNm",
       "memberName": "김다인",
-      "memberRole": "집사"
+      "memberRole": "집사",
+      "actionType": "reservation",
+      "actionUrl": "https://naver.me/5NeXkjNm"
     },
     {
       "id": "956",
@@ -40,7 +42,9 @@
       "category": "쇼핑",
       "reservationUrl": "",
       "memberName": "이규진",
-      "memberRole": "집사"
+      "memberRole": "집사",
+      "actionType": "reservation",
+      "actionUrl": ""
     },
     {
       "id": "929",
@@ -61,7 +65,9 @@
       "category": "생활",
       "reservationUrl": "",
       "memberName": "음성만",
-      "memberRole": "집사"
+      "memberRole": "집사",
+      "actionType": "reservation",
+      "actionUrl": ""
     },
     {
       "id": "892",
@@ -82,7 +88,9 @@
       "category": "생활",
       "reservationUrl": "",
       "memberName": "정충인",
-      "memberRole": "안수집사"
+      "memberRole": "안수집사",
+      "actionType": "reservation",
+      "actionUrl": ""
     },
     {
       "id": "839",
@@ -103,7 +111,9 @@
       "category": "생활",
       "reservationUrl": "https://m.site.naver.com/21CIE",
       "memberName": "노재승",
-      "memberRole": "청년"
+      "memberRole": "청년",
+      "actionType": "reservation",
+      "actionUrl": "https://m.site.naver.com/21CIE"
     },
     {
       "id": "711",
@@ -122,7 +132,9 @@
       "category": "건강",
       "reservationUrl": "",
       "memberName": "안성이",
-      "memberRole": "집사"
+      "memberRole": "집사",
+      "actionType": "reservation",
+      "actionUrl": ""
     },
     {
       "id": "702",
@@ -141,7 +153,9 @@
       "category": "생활",
       "reservationUrl": "",
       "memberName": "이태원",
-      "memberRole": "안수집사"
+      "memberRole": "안수집사",
+      "actionType": "reservation",
+      "actionUrl": ""
     },
     {
       "id": "585",
@@ -160,7 +174,9 @@
       "category": "교육",
       "reservationUrl": "",
       "memberName": "윤미",
-      "memberRole": ""
+      "memberRole": "",
+      "actionType": "reservation",
+      "actionUrl": ""
     },
     {
       "id": "584",
@@ -181,7 +197,9 @@
       "category": "건강",
       "reservationUrl": "",
       "memberName": "서지훈",
-      "memberRole": "성도"
+      "memberRole": "성도",
+      "actionType": "reservation",
+      "actionUrl": ""
     },
     {
       "id": "563",
@@ -211,7 +229,9 @@
       "category": "쇼핑",
       "reservationUrl": "https://smartstore.naver.com/ezerscent",
       "memberName": "김옥출",
-      "memberRole": "집사"
+      "memberRole": "집사",
+      "actionType": "reservation",
+      "actionUrl": "https://smartstore.naver.com/ezerscent"
     },
     {
       "id": "562",
@@ -239,7 +259,9 @@
       "category": "교육",
       "reservationUrl": "",
       "memberName": "최종헌",
-      "memberRole": "집사"
+      "memberRole": "집사",
+      "actionType": "reservation",
+      "actionUrl": ""
     },
     {
       "id": "561",
@@ -261,7 +283,9 @@
       "category": "음식",
       "reservationUrl": "",
       "memberName": "오성희",
-      "memberRole": "권사"
+      "memberRole": "권사",
+      "actionType": "reservation",
+      "actionUrl": ""
     },
     {
       "id": "560",
@@ -286,7 +310,9 @@
       "category": "생활",
       "reservationUrl": "",
       "memberName": "이규진",
-      "memberRole": ""
+      "memberRole": "",
+      "actionType": "reservation",
+      "actionUrl": ""
     },
     {
       "id": "559",
@@ -309,7 +335,9 @@
       "category": "쇼핑",
       "reservationUrl": "https://smartstore.naver.com/204harang",
       "memberName": "원정란",
-      "memberRole": "집사"
+      "memberRole": "집사",
+      "actionType": "reservation",
+      "actionUrl": "https://smartstore.naver.com/204harang"
     },
     {
       "id": "557",
@@ -331,7 +359,9 @@
       "category": "쇼핑",
       "reservationUrl": "",
       "memberName": "김옥길",
-      "memberRole": "권사"
+      "memberRole": "권사",
+      "actionType": "reservation",
+      "actionUrl": ""
     },
     {
       "id": "555",
@@ -355,7 +385,9 @@
       "category": "쇼핑",
       "reservationUrl": "",
       "memberName": "이휘재",
-      "memberRole": "집사"
+      "memberRole": "집사",
+      "actionType": "reservation",
+      "actionUrl": ""
     },
     {
       "id": "554",
@@ -377,7 +409,9 @@
       "category": "음식",
       "reservationUrl": "",
       "memberName": "김지원",
-      "memberRole": "권사"
+      "memberRole": "권사",
+      "actionType": "reservation",
+      "actionUrl": ""
     },
     {
       "id": "553",
@@ -413,7 +447,9 @@
       "category": "쇼핑",
       "reservationUrl": "",
       "memberName": "장상혁",
-      "memberRole": "안수집사"
+      "memberRole": "안수집사",
+      "actionType": "reservation",
+      "actionUrl": ""
     }
   ]
 }

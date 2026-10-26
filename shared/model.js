@@ -37,6 +37,19 @@ export function normalizeBusinessCategory(category, id) {
 }
 export const maxImageBytes = 5 * 1024 * 1024;
 
+export function getBusinessAction(row) {
+  const type = row.actionType === undefined ? 'reservation' : row.actionType;
+  if (!['reservation', 'purchase'].includes(type)) throw new Error('연결 유형은 예약 또는 구매 중에서 선택해 주세요.');
+  const url = row.actionUrl !== undefined ? row.actionUrl : type === 'reservation' ? (row.reservationUrl ?? '') : '';
+  if (typeof url !== 'string' || url.length > 2048) throw new Error('예약·구매 페이지 주소를 확인해 주세요.');
+  if (url !== '') {
+    let parsed;
+    try { parsed = new URL(url); } catch { throw new Error('올바른 예약·구매 페이지 주소를 입력해 주세요.'); }
+    if (!['http:', 'https:'].includes(parsed.protocol) || parsed.username || parsed.password) throw new Error('예약·구매 주소는 http 또는 https로 시작해야 합니다.');
+  }
+  return { type, url };
+}
+
 export function imagePath(url) {
   if (typeof url !== 'string' || !url.startsWith(cdnBase)) return null;
   const path = url.slice(cdnBase.length);
@@ -123,6 +136,7 @@ export function validateBusinesses(rows) {
     for (const field of ['images', 'phones', 'websites']) {
       if (!Array.isArray(row[field]) || row[field].length > 30 || row[field].some(value => typeof value !== 'string' || !value.trim())) throw new Error('이미지, 전화번호, 웹사이트 목록을 확인해 주세요.');
     }
+    getBusinessAction(row);
     if (row.reservationUrl !== undefined && (typeof row.reservationUrl !== 'string' || row.reservationUrl.length > 2048)) throw new Error('예약 페이지 주소를 확인해 주세요.');
     if (row.phones.some(value => !/^\+?[0-9() .-]{3,40}$/.test(value))) throw new Error('전화번호 형식을 확인해 주세요.');
     for (const value of [...row.images, ...row.websites, ...(row.reservationUrl ? [row.reservationUrl] : []), ...(row.sourceUrl ? [row.sourceUrl] : [])]) {

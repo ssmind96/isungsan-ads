@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { cdnBase, imagePath, validDate, normalizeBusinessCategory, validateAssets, validateChanges } from '../shared/model.js';
+import { cdnBase, imagePath, validDate, normalizeBusinessCategory, getBusinessAction, validateAssets, validateChanges } from '../shared/model.js';
 
 const path = 'banners/example.png';
 const banner = () => ({ order: 1, title: '교회 소식', image: cdnBase + path, bgColor: '#EEEEEE', link: '', startDate: '20260101', endDate: '20261231' });
@@ -106,4 +106,17 @@ test('phone arrays support none, one and multiple entries up to the shared limit
   }
   assert.throws(() => validateAssets({ banners: [], businesses: [{ ...business(), phones: '010-1234-5678' }] }));
   assert.throws(() => validateAssets({ banners: [], businesses: [{ ...business(), phones: Array(31).fill('010-1234-5678') }] }));
+});
+
+
+test('reservation/purchase links validate and legacy booking links remain readable', () => {
+  assert.deepEqual(getBusinessAction({}), { type: 'reservation', url: '' });
+  assert.deepEqual(getBusinessAction({ reservationUrl: 'https://booking.example' }), { type: 'reservation', url: 'https://booking.example' });
+  assert.deepEqual(getBusinessAction({ actionType: 'purchase', actionUrl: 'https://shop.example' }), { type: 'purchase', url: 'https://shop.example' });
+  assert.deepEqual(getBusinessAction({ actionType: 'purchase', reservationUrl: 'https://booking.example' }), { type: 'purchase', url: '' });
+  assert.deepEqual(getBusinessAction({ actionUrl: '', reservationUrl: 'https://booking.example' }), { type: 'reservation', url: '' });
+  for (const action of [{ actionType: 'unknown' }, { actionType: null }, { actionUrl: null }, { actionUrl: 123 }, { actionUrl: 'javascript:alert(1)' }, { actionUrl: 'https://user:pass@example.com' }, { actionUrl: 'https://example.com/' + 'a'.repeat(2048) }]) {
+    assert.throws(() => validateAssets({ banners: [], businesses: [{ ...business(), ...action }] }));
+  }
+  for (const actionType of ['reservation', 'purchase']) for (const actionUrl of ['', 'https://example.com/action']) assert.doesNotThrow(() => validateAssets({ banners: [], businesses: [{ ...business(), actionType, actionUrl }] }));
 });

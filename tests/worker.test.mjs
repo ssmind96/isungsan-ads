@@ -131,8 +131,17 @@ test('banner-only clients preserve the separately stored businesses and both JSO
     assert.equal(response.status, 200);
     const entries = mutations[0].body.tree;
     assert.deepEqual(JSON.parse(entries.find(entry => entry.path === 'assets.json').content), { banners: [], retained: true });
-    assert.deepEqual(JSON.parse(entries.find(entry => entry.path === 'businesses.json').content), { businesses: [business] });
+    assert.deepEqual(JSON.parse(entries.find(entry => entry.path === 'businesses.json').content), { businesses: [{ ...business, actionType: 'reservation', actionUrl: business.reservationUrl }] });
     assert.equal(mutations.length, 3);
     assert.equal(mutations[2].body.force, false);
+    mutations.length = 0;
+    const purchaseRequest = new Request('https://auth.example/api/save', { method: 'POST', headers: { Origin: origin, Authorization: `Bearer ${session}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ head: 'head', assets: { banners: [], businesses: [{ ...business, actionType: 'purchase', actionUrl: 'https://shop.example.com' }] }, uploads: [], deletions: [] }) });
+    const purchaseResponse = await worker.fetch(purchaseRequest, env);
+    assert.equal(purchaseResponse.status, 200);
+    const savedPurchase = JSON.parse(mutations[0].body.tree.find(entry => entry.path === 'businesses.json').content).businesses[0];
+    assert.equal(savedPurchase.actionType, 'purchase');
+    assert.equal(savedPurchase.actionUrl, 'https://shop.example.com');
+    assert.equal(savedPurchase.reservationUrl, '', 'purchase links are not exposed as reservation links to older apps');
+
   } finally { globalThis.fetch = originalFetch; }
 });
