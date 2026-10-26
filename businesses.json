@@ -226,7 +226,7 @@
     {
       "id": "563",
       "title": "에제르 향기공방",
-      "description": "- 업종 : 향수만들기\n- 핵심 상품/서비스 : 나만의 향수(디퓨져)만들기, 디퓨져판매(단체주문가능)\n에제르향기 공방\n\nhttps://naver.me/GlGPhQkt",
+      "description": "- 업종 : 향수만들기\n- 핵심 상품/서비스 : 나만의 향수(디퓨져)만들기, 디퓨져판매(단체주문가능)",
       "images": [
         "https://cdn.jsdelivr.net/gh/ssmind96/isungsan-ads@main/businesses/563-1.jpg",
         "https://cdn.jsdelivr.net/gh/ssmind96/isungsan-ads@main/businesses/563-2.jpg",
@@ -249,10 +249,10 @@
       "sourceUrl": "https://www.isungsan.net/board/view.do?iboardmanagerseq=128&iboardseq=563",
       "order": 11,
       "category": "쇼핑",
-      "reservationUrl": "https://smartstore.naver.com/ezerscent",
+      "reservationUrl": "",
       "memberName": "김옥출",
       "memberRole": "집사",
-      "actionType": "reservation",
+      "actionType": "purchase",
       "actionUrl": "https://smartstore.naver.com/ezerscent"
     },
     {
@@ -355,10 +355,10 @@
       "sourceUrl": "https://www.isungsan.net/board/view.do?iboardmanagerseq=128&iboardseq=559",
       "order": 15,
       "category": "쇼핑",
-      "reservationUrl": "https://smartstore.naver.com/204harang",
+      "reservationUrl": "",
       "memberName": "원정란",
       "memberRole": "집사",
-      "actionType": "reservation",
+      "actionType": "purchase",
       "actionUrl": "https://smartstore.naver.com/204harang"
     },
     {
